@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -14,13 +15,39 @@ import { MOCK_PATIENTS } from "@/lib/mock-data"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Search, Plus, User, MoreHorizontal, Mail, Phone, Calendar } from "lucide-react"
+import { toast } from "@/hooks/use-toast"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export default function PatientsPage() {
   const [mounted, setMounted] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  const handleAction = (action: string) => {
+    toast({
+      title: "Acción activada",
+      description: `Has pulsado en: ${action}. Funcionalidad en desarrollo.`,
+    })
+  }
+
+  const filteredPatients = MOCK_PATIENTS.filter(p => 
+    p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    p.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    p.phone.includes(searchQuery)
+  )
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -31,10 +58,36 @@ export default function PatientsPage() {
             <h1 className="text-3xl font-bold tracking-tight">Pacientes</h1>
             <p className="text-muted-foreground">Gestiona la base de datos e historial de pacientes de tu clínica.</p>
           </div>
-          <Button className="bg-accent hover:bg-accent/90">
-            <Plus className="h-4 w-4 mr-2" />
-            Añadir Paciente
-          </Button>
+          
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="bg-accent hover:bg-accent/90">
+                <Plus className="h-4 w-4 mr-2" />
+                Añadir Paciente
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Añadir Nuevo Paciente</DialogTitle>
+                <DialogDescription>
+                  Crea un nuevo perfil de paciente en el sistema.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="p-name" className="text-right">Nombre</Label>
+                  <Input id="p-name" className="col-span-3" />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="p-email" className="text-right">Email</Label>
+                  <Input id="p-email" type="email" className="col-span-3" />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button type="submit" onClick={() => handleAction("Guardar Paciente")}>Guardar Paciente</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
 
         <div className="flex items-center gap-4 mb-6">
@@ -44,10 +97,12 @@ export default function PatientsPage() {
               type="text" 
               placeholder="Buscar pacientes por nombre, email, teléfono..." 
               className="w-full bg-white border rounded-md py-2 pl-10 pr-4 outline-none focus:border-primary transition-all shadow-sm"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          <Button variant="outline" className="bg-white">Filtrar</Button>
-          <Button variant="outline" className="bg-white">Exportar</Button>
+          <Button variant="outline" className="bg-white" onClick={() => handleAction("Filtrar pacientes")}>Filtrar</Button>
+          <Button variant="outline" className="bg-white" onClick={() => handleAction("Exportar pacientes")}>Exportar</Button>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
@@ -63,7 +118,7 @@ export default function PatientsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {MOCK_PATIENTS.map((patient) => (
+              {filteredPatients.map((patient) => (
                 <TableRow key={patient.id} className="cursor-pointer hover:bg-secondary/10 group">
                   <TableCell>
                     <div className="flex items-center gap-3">
@@ -107,8 +162,8 @@ export default function PatientsPage() {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
-                      <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-primary"><Calendar className="h-4 w-4" /></Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-primary"><MoreHorizontal className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-primary" onClick={() => handleAction(`Ver calendario de ${patient.name}`)}><Calendar className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 hover:text-primary" onClick={() => handleAction(`Más opciones de ${patient.name}`)}><MoreHorizontal className="h-4 w-4" /></Button>
                     </div>
                   </TableCell>
                 </TableRow>

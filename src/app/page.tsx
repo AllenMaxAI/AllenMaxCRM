@@ -14,9 +14,12 @@ import {
 import { MOCK_APPOINTMENTS, MOCK_CONVERSATIONS, MOCK_PATIENTS } from "@/lib/mock-data"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { toast } from "@/hooks/use-toast"
+import { useRouter } from "next/navigation"
 
 export default function Dashboard() {
   const [mounted, setMounted] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     setMounted(true)
@@ -34,6 +37,13 @@ export default function Dashboard() {
     { label: "Crecimiento", value: "+12%", icon: TrendingUp, color: "text-teal-600" },
   ]
 
+  const handleAction = (msg: string) => {
+    toast({
+      title: "Acción",
+      description: msg,
+    })
+  }
+
   return (
     <div className="flex min-h-screen bg-background">
       <SidebarNav />
@@ -43,7 +53,7 @@ export default function Dashboard() {
             <h1 className="text-3xl font-bold tracking-tight text-foreground">Tablero</h1>
             <p className="text-muted-foreground">Bienvenido de nuevo, Dr. Pérez. Esto es lo que está pasando hoy.</p>
           </div>
-          <Button className="bg-accent hover:bg-accent/90">
+          <Button className="bg-accent hover:bg-accent/90" onClick={() => router.push('/calendar')}>
             <Calendar className="mr-2 h-4 w-4" />
             Nueva Cita
           </Button>
@@ -51,7 +61,7 @@ export default function Dashboard() {
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => (
-            <Card key={stat.label} className="border-none shadow-sm">
+            <Card key={stat.label} className="border-none shadow-sm cursor-pointer hover:shadow-md transition-shadow" onClick={() => handleAction(`Ver detalle de ${stat.label}`)}>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   {stat.label}
@@ -69,14 +79,14 @@ export default function Dashboard() {
           <Card className="border-none shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Citas de Hoy</CardTitle>
-              <Button variant="ghost" size="sm" className="text-primary">
+              <Button variant="ghost" size="sm" className="text-primary" onClick={() => router.push('/calendar')}>
                 Ver Todo <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {todayAppointments.length > 0 ? todayAppointments.map((app) => (
-                  <div key={app.id} className="flex items-center justify-between rounded-lg border p-4 transition-colors hover:bg-secondary/20">
+                  <div key={app.id} className="flex items-center justify-between rounded-lg border p-4 transition-colors hover:bg-secondary/20 cursor-pointer" onClick={() => handleAction(`Cita de ${app.patient_name}`)}>
                     <div className="flex items-center gap-4">
                       <div className="flex h-10 w-10 flex-col items-center justify-center rounded-md bg-secondary text-primary font-bold">
                         <span className="text-xs uppercase">
@@ -105,14 +115,18 @@ export default function Dashboard() {
           <Card className="border-none shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Conversaciones Recientes IA</CardTitle>
-              <Button variant="ghost" size="sm" className="text-primary">
+              <Button variant="ghost" size="sm" className="text-primary" onClick={() => router.push('/conversations')}>
                 Historial <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {MOCK_CONVERSATIONS.map((conv) => (
-                  <div key={conv.id} className="group relative flex flex-col gap-1 rounded-lg border p-4 transition-colors hover:bg-secondary/20">
+                  <div 
+                    key={conv.id} 
+                    className="group relative flex flex-col gap-1 rounded-lg border p-4 transition-colors hover:bg-secondary/20 cursor-pointer"
+                    onClick={() => router.push('/conversations')}
+                  >
                     <div className="flex items-center justify-between">
                       <p className="font-semibold text-primary">{conv.patient_name}</p>
                       <span className="text-[10px] text-muted-foreground flex items-center gap-1">

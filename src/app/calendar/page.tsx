@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -14,13 +15,25 @@ import {
   Filter
 } from "lucide-react"
 import { MOCK_APPOINTMENTS } from "@/lib/mock-data"
-import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
+import { toast } from "@/hooks/use-toast"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export default function CalendarPage() {
   const [mounted, setMounted] = useState(false)
   const [view, setView] = useState<'día' | 'semana' | 'mes'>('semana')
   const [currentDate, setCurrentDate] = useState(new Date())
+  const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
     setMounted(true)
@@ -28,7 +41,6 @@ export default function CalendarPage() {
 
   const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
   
-  // Simplified week view generation
   const startOfWeek = new Date(currentDate)
   startOfWeek.setDate(currentDate.getDate() - currentDate.getDay())
   
@@ -37,6 +49,18 @@ export default function CalendarPage() {
     day.setDate(startOfWeek.getDate() + i)
     return day
   })
+
+  const handleAction = (action: string) => {
+    toast({
+      title: "Acción activada",
+      description: `Has pulsado en: ${action}. Funcionalidad en desarrollo.`,
+    })
+  }
+
+  const filteredAppointments = MOCK_APPOINTMENTS.filter(app => 
+    app.patient_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    app.title.toLowerCase().includes(searchQuery.toLowerCase())
+  )
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -68,16 +92,48 @@ export default function CalendarPage() {
           <div className="flex items-center gap-3">
             <div className="flex items-center border rounded-md px-2 py-1 bg-secondary/20">
               <Search className="h-4 w-4 text-muted-foreground mr-2" />
-              <input type="text" placeholder="Buscar citas..." className="bg-transparent text-sm outline-none w-48" />
+              <input 
+                type="text" 
+                placeholder="Buscar citas..." 
+                className="bg-transparent text-sm outline-none w-48"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
-            <Button size="sm" variant="outline">
+            <Button size="sm" variant="outline" onClick={() => handleAction("Filtrar")}>
               <Filter className="h-4 w-4 mr-2" />
               Filtrar
             </Button>
-            <Button size="sm" className="bg-accent hover:bg-accent/90">
-              <Plus className="h-4 w-4 mr-2" />
-              Nueva Cita
-            </Button>
+            
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button size="sm" className="bg-accent hover:bg-accent/90">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Nueva Cita
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Programar Nueva Cita</DialogTitle>
+                  <DialogDescription>
+                    Introduce los detalles para la nueva cita dental.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="name" className="text-right">Paciente</Label>
+                    <Input id="name" placeholder="Nombre completo" className="col-span-3" />
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="type" className="text-right">Tratamiento</Label>
+                    <Input id="type" placeholder="Ej: Limpieza" className="col-span-3" />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button type="submit" onClick={() => handleAction("Guardar Cita")}>Guardar Cita</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </header>
 
@@ -138,7 +194,7 @@ export default function CalendarPage() {
                     </div>
                     {Array.from({ length: 7 }, (_, dayIndex) => (
                       <div key={dayIndex} className="border-r last:border-r-0 relative group-hover:bg-secondary/5">
-                        {MOCK_APPOINTMENTS.map((app) => {
+                        {filteredAppointments.map((app) => {
                           const appDate = new Date(app.start_time)
                           const appHour = appDate.getHours()
                           const isSameDay = appDate.toDateString() === weekDays[dayIndex].toDateString()
@@ -151,7 +207,7 @@ export default function CalendarPage() {
                               )}>
                                 <div className="font-bold flex justify-between items-start">
                                   <span className="truncate">{app.patient_name}</span>
-                                  <MoreVertical className="h-3 w-3 opacity-50" />
+                                  <MoreVertical className="h-3 w-3 opacity-50 cursor-pointer" onClick={() => handleAction("Opciones de cita")} />
                                 </div>
                                 <div className="truncate opacity-80">{app.title}</div>
                               </div>
