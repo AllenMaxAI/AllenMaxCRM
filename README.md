@@ -1,52 +1,52 @@
 # DentalFlow CRM
 
-Este es un CRM moderno para clínicas dentales construido con Next.js, React, Tailwind CSS y Genkit AI.
+Este es un CRM moderno para clínicas dentales construido con Next.js, React, Tailwind CSS y Genkit AI. Este proyecto está preparado para ser migrado a Google Antigravity o Google AI Studio.
 
-## Cómo subir este proyecto a GitHub
+## 🚀 Cómo subir este proyecto a GitHub
 
-Para conectar este código con tu nuevo repositorio de GitHub, abre tu terminal en la carpeta del proyecto y ejecuta estos comandos:
+Para llevar este código a tu propio repositorio y luego conectarlo con Antigravity, sigue estos pasos:
 
-1. **Inicializar el repositorio local:**
-   ```bash
-   git init
-   ```
+### 1. Descarga el código
+Si estás viendo esto en el editor web, asegúrate de descargar el proyecto completo a tu máquina local (normalmente hay una opción de "Download" o "Export" en el menú de archivos).
 
-2. **Añadir todos los archivos:**
-   ```bash
-   git add .
-   ```
+### 2. Crea un repositorio en GitHub
+1. Ve a [github.com/new](https://github.com/new).
+2. Ponle un nombre (ej. `mi-crm-dental`).
+3. Déjalo como **Public** o **Private** y dale a **Create repository**.
+4. Copia la URL que termina en `.git` (ej. `https://github.com/TU_USUARIO/mi-crm-dental.git`).
 
-3. **Crear el primer commit:**
-   ```bash
-   git commit -m "Primer commit: DentalFlow CRM"
-   ```
+### 3. Ejecuta estos comandos en tu terminal
+Abre la terminal en la carpeta de tu proyecto local y ejecuta:
 
-4. **Vincular con tu repositorio de GitHub:**
-   *(Sustituye la URL por la de tu repositorio recién creado)*
-   ```bash
-   git remote add origin https://github.com/TU_USUARIO/TU_REPOSITORIO.git
-   ```
+```bash
+# Inicializar el repositorio local
+git init
 
-5. **Subir el código:**
-   ```bash
-   git branch -M main
-   git push -u origin main
-   ```
+# Añadir todos los archivos (el .gitignore se encargará del resto)
+git add .
 
-## Tecnologías utilizadas
+# Crear el primer commit
+git commit -m "Primer commit: DentalFlow CRM listo para Antigravity"
+
+# Vincular con tu repositorio de GitHub (Pega aquí TU URL)
+git remote add origin https://github.com/TU_USUARIO/TU_REPOSITORIO.git
+
+# Cambiar a la rama principal
+git branch -M main
+
+# Subir el código
+git push -u origin main
+```
+
+## 🛠️ Tecnologías utilizadas
 - **Next.js 15 (App Router)**
 - **Tailwind CSS** para los estilos
 - **Shadcn UI** para componentes de interfaz
 - **Genkit AI** para el procesamiento de conversaciones con IA
 - **Lucide React** para iconografía
 
-## Desarrollo local
+## 💡 Próximos pasos: Google Antigravity
+Una vez que tu código esté en GitHub, podrás importarlo directamente desde Google AI Studio o Google Antigravity conectando tu cuenta de GitHub y seleccionando el repositorio que acabas de crear.
 
-Para ejecutar el proyecto en tu máquina:
-
-```bash
-npm install
-npm run dev
-```
-
-Abre [http://localhost:3000](http://localhost:3000) en tu navegador para ver el resultado.
+---
+*Nota: Asegúrate de tener instalado Git en tu ordenador antes de empezar.*
