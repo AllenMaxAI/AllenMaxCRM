@@ -21,10 +21,10 @@ export default function Dashboard() {
   })
 
   const stats = [
-    { label: "Total Patients", value: MOCK_PATIENTS.length.toString(), icon: Users, color: "text-blue-600" },
-    { label: "Today's Appointments", value: todayAppointments.length.toString(), icon: Calendar, color: "text-green-600" },
-    { label: "Messages Today", value: "12", icon: MessageSquare, color: "text-purple-600" },
-    { label: "Growth", value: "+12%", icon: TrendingUp, color: "text-teal-600" },
+    { label: "Pacientes Totales", value: MOCK_PATIENTS.length.toString(), icon: Users, color: "text-blue-600" },
+    { label: "Citas de Hoy", value: todayAppointments.length.toString(), icon: Calendar, color: "text-green-600" },
+    { label: "Mensajes Hoy", value: "12", icon: MessageSquare, color: "text-purple-600" },
+    { label: "Crecimiento", value: "+12%", icon: TrendingUp, color: "text-teal-600" },
   ]
 
   return (
@@ -33,12 +33,12 @@ export default function Dashboard() {
       <main className="flex-1 overflow-y-auto p-8">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">Dashboard</h1>
-            <p className="text-muted-foreground">Welcome back, Dr. Doe. Here's what's happening today.</p>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">Tablero</h1>
+            <p className="text-muted-foreground">Bienvenido de nuevo, Dr. Pérez. Esto es lo que está pasando hoy.</p>
           </div>
           <Button className="bg-accent hover:bg-accent/90">
             <Calendar className="mr-2 h-4 w-4" />
-            New Appointment
+            Nueva Cita
           </Button>
         </div>
 
@@ -61,9 +61,9 @@ export default function Dashboard() {
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
           <Card className="border-none shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Today's Appointments</CardTitle>
+              <CardTitle>Citas de Hoy</CardTitle>
               <Button variant="ghost" size="sm" className="text-primary">
-                View All <ArrowRight className="ml-2 h-4 w-4" />
+                Ver Todo <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </CardHeader>
             <CardContent>
@@ -80,12 +80,12 @@ export default function Dashboard() {
                         <p className="text-xs text-muted-foreground">{app.title}</p>
                       </div>
                     </div>
-                    <Badge variant={app.status === 'confirmed' ? 'default' : 'secondary'} className={app.status === 'confirmed' ? 'bg-accent' : ''}>
+                    <Badge variant={app.status === 'confirmada' ? 'default' : 'secondary'} className={app.status === 'confirmada' ? 'bg-accent' : ''}>
                       {app.status}
                     </Badge>
                   </div>
                 )) : (
-                  <p className="text-center py-8 text-muted-foreground italic">No appointments for today.</p>
+                  <p className="text-center py-8 text-muted-foreground italic">No hay citas para hoy.</p>
                 )}
               </div>
             </CardContent>
@@ -93,9 +93,9 @@ export default function Dashboard() {
 
           <Card className="border-none shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Recent AI Conversations</CardTitle>
+              <CardTitle>Conversaciones Recientes IA</CardTitle>
               <Button variant="ghost" size="sm" className="text-primary">
-                History <ArrowRight className="ml-2 h-4 w-4" />
+                Historial <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </CardHeader>
             <CardContent>

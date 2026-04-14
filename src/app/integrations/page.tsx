@@ -22,16 +22,16 @@ export default function IntegrationsPage() {
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
     toast({
-      title: "Copied!",
-      description: "Text copied to clipboard.",
+      title: "¡Copiado!",
+      description: "Texto copiado al portapapeles.",
     })
   }
 
   const platforms = [
-    { name: "WhatsApp Chatbot", icon: Smartphone, status: "Connected", color: "bg-green-100 text-green-700" },
-    { name: "Website Chatbot", icon: Globe, status: "Connected", color: "bg-green-100 text-green-700" },
-    { name: "Voice Agent", icon: Phone, status: "Pending", color: "bg-yellow-100 text-yellow-700" },
-    { name: "Instagram Chatbot", icon: MessageSquare, status: "Available", color: "bg-gray-100 text-gray-700" },
+    { name: "Chatbot WhatsApp", icon: Smartphone, status: "Conectado", color: "bg-green-100 text-green-700" },
+    { name: "Chatbot Web", icon: Globe, status: "Conectado", color: "bg-green-100 text-green-700" },
+    { name: "Agente de Voz", icon: Phone, status: "Pendiente", color: "bg-yellow-100 text-yellow-700" },
+    { name: "Chatbot Instagram", icon: MessageSquare, status: "Disponible", color: "bg-gray-100 text-gray-700" },
   ]
 
   return (
@@ -39,8 +39,8 @@ export default function IntegrationsPage() {
       <SidebarNav />
       <main className="flex-1 p-8 overflow-y-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight text-primary">Integrations</h1>
-          <p className="text-muted-foreground">Connect your AI chatbots and voice agents to DentalFlow CRM.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-primary">Integraciones</h1>
+          <p className="text-muted-foreground">Conecta tus chatbots de IA y agentes de voz a DentalFlow CRM.</p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
@@ -48,13 +48,13 @@ export default function IntegrationsPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Code className="h-5 w-5 text-primary" />
-                API Configuration
+                Configuración de API
               </CardTitle>
-              <CardDescription>Your unique API credentials for secure data ingestion.</CardDescription>
+              <CardDescription>Tus credenciales únicas de API para la ingesta segura de datos.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase text-muted-foreground">API Key</label>
+                <label className="text-xs font-bold uppercase text-muted-foreground">Clave API</label>
                 <div className="flex items-center gap-2 bg-secondary/30 p-3 rounded-lg border font-mono text-sm group">
                   <span className="flex-1 truncate">{apiKey}</span>
                   <Button variant="ghost" size="icon" onClick={() => copyToClipboard(apiKey)}>
@@ -63,17 +63,17 @@ export default function IntegrationsPage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-bold uppercase text-muted-foreground">Clinic ID</label>
+                <label className="text-xs font-bold uppercase text-muted-foreground">ID de Clínica</label>
                 <div className="flex items-center gap-2 bg-secondary/30 p-3 rounded-lg border font-mono text-sm">
-                  <span className="flex-1">clinic_001</span>
-                  <Button variant="ghost" size="icon" onClick={() => copyToClipboard('clinic_001')}>
+                  <span className="flex-1">clinica_001</span>
+                  <Button variant="ghost" size="icon" onClick={() => copyToClipboard('clinica_001')}>
                     <Copy className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
               <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
                 <p className="text-xs text-primary font-medium leading-relaxed">
-                  Use these credentials in your chatbot platforms (ManyChat, Vapi, Retell, etc.) to push conversation logs and appointment data directly into your CRM.
+                  Usa estas credenciales en tus plataformas de chatbot (ManyChat, Vapi, Retell, etc.) para enviar registros de conversación y datos de citas directamente a tu CRM.
                 </p>
               </div>
             </CardContent>
@@ -81,8 +81,8 @@ export default function IntegrationsPage() {
 
           <Card className="border-none shadow-sm">
             <CardHeader>
-              <CardTitle>Connected Platforms</CardTitle>
-              <CardDescription>Status of your AI communication channels.</CardDescription>
+              <CardTitle>Plataformas Conectadas</CardTitle>
+              <CardDescription>Estado de tus canales de comunicación de IA.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {platforms.map((platform) => (
@@ -96,7 +96,7 @@ export default function IntegrationsPage() {
                       <Badge className={`text-[10px] ${platform.color} border-none`}>{platform.status}</Badge>
                     </div>
                   </div>
-                  <Button variant="ghost" size="sm">Configure</Button>
+                  <Button variant="ghost" size="sm">Configurar</Button>
                 </div>
               ))}
             </CardContent>
@@ -106,15 +106,15 @@ export default function IntegrationsPage() {
         <div className="mt-8">
           <Card className="border-none shadow-sm">
             <CardHeader>
-              <CardTitle>Webhook Endpoints</CardTitle>
-              <CardDescription>Available REST API endpoints for AI systems.</CardDescription>
+              <CardTitle>Endpoints de Webhook</CardTitle>
+              <CardDescription>Endpoints de API REST disponibles para sistemas de IA.</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {[
-                  { method: 'POST', path: '/api/new-message', desc: 'Syncs a new chat message to a conversation.' },
-                  { method: 'POST', path: '/api/new-call', desc: 'Syncs a voice call transcript and summary.' },
-                  { method: 'POST', path: '/api/create-appointment', desc: 'Creates a new appointment in the calendar.' },
+                  { method: 'POST', path: '/api/new-message', desc: 'Sincroniza un nuevo mensaje de chat a una conversación.' },
+                  { method: 'POST', path: '/api/new-call', desc: 'Sincroniza la transcripción y el resumen de una llamada de voz.' },
+                  { method: 'POST', path: '/api/create-appointment', desc: 'Crea una nueva cita en el calendario.' },
                 ].map((endpoint) => (
                   <div key={endpoint.path} className="p-4 rounded-xl border bg-white flex items-center justify-between group hover:border-primary transition-colors">
                     <div className="flex items-start gap-4">

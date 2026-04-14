@@ -14,12 +14,12 @@ import {
 import { cn } from "@/lib/utils"
 
 const navItems = [
-  { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-  { name: 'Calendar', href: '/calendar', icon: Calendar },
-  { name: 'Conversations', href: '/conversations', icon: MessageSquare },
-  { name: 'Patients', href: '/patients', icon: Users },
-  { name: 'Integrations', href: '/integrations', icon: Share2 },
-  { name: 'Settings', href: '/settings', icon: Settings },
+  { name: 'Tablero', href: '/', icon: LayoutDashboard },
+  { name: 'Calendario', href: '/calendar', icon: Calendar },
+  { name: 'Conversaciones', href: '/conversations', icon: MessageSquare },
+  { name: 'Pacientes', href: '/patients', icon: Users },
+  { name: 'Integraciones', href: '/integrations', icon: Share2 },
+  { name: 'Configuración', href: '/settings', icon: Settings },
 ]
 
 export function SidebarNav() {
@@ -64,8 +64,8 @@ export function SidebarNav() {
             JD
           </div>
           <div className="flex flex-col">
-            <span className="text-xs font-semibold">Dr. John Doe</span>
-            <span className="text-[10px] text-muted-foreground">Administrator</span>
+            <span className="text-xs font-semibold">Dr. Juan Pérez</span>
+            <span className="text-[10px] text-muted-foreground">Administrador</span>
           </div>
         </div>
       </div>

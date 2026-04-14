@@ -18,10 +18,10 @@ import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 
 export default function CalendarPage() {
-  const [view, setView] = useState<'day' | 'week' | 'month'>('week')
+  const [view, setView] = useState<'día' | 'semana' | 'mes'>('semana')
   const [currentDate, setCurrentDate] = useState(new Date())
 
-  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
   
   // Simplified week view generation
   const startOfWeek = new Date(currentDate)
@@ -42,10 +42,10 @@ export default function CalendarPage() {
           <div className="flex items-center gap-4">
             <h1 className="text-xl font-bold flex items-center gap-2">
               <CalendarIcon className="h-5 w-5 text-primary" />
-              Calendar
+              Calendario
             </h1>
             <div className="flex items-center gap-1 bg-secondary/50 p-1 rounded-md ml-4">
-              {(['day', 'week', 'month'] as const).map((v) => (
+              {(['día', 'semana', 'mes'] as const).map((v) => (
                 <button
                   key={v}
                   onClick={() => setView(v)}
@@ -63,15 +63,15 @@ export default function CalendarPage() {
           <div className="flex items-center gap-3">
             <div className="flex items-center border rounded-md px-2 py-1 bg-secondary/20">
               <Search className="h-4 w-4 text-muted-foreground mr-2" />
-              <input type="text" placeholder="Search appointments..." className="bg-transparent text-sm outline-none w-48" />
+              <input type="text" placeholder="Buscar citas..." className="bg-transparent text-sm outline-none w-48" />
             </div>
             <Button size="sm" variant="outline">
               <Filter className="h-4 w-4 mr-2" />
-              Filter
+              Filtrar
             </Button>
             <Button size="sm" className="bg-accent hover:bg-accent/90">
               <Plus className="h-4 w-4 mr-2" />
-              New Appointment
+              Nueva Cita
             </Button>
           </div>
         </header>
@@ -82,27 +82,27 @@ export default function CalendarPage() {
             <div className="flex items-center gap-1">
               <Button variant="ghost" size="icon" onClick={() => {
                 const newDate = new Date(currentDate)
-                newDate.setDate(currentDate.getDate() - (view === 'week' ? 7 : 1))
+                newDate.setDate(currentDate.getDate() - (view === 'semana' ? 7 : 1))
                 setCurrentDate(newDate)
               }}>
                 <ChevronLeft className="h-4 w-4" />
               </Button>
               <Button variant="ghost" size="icon" onClick={() => {
                 const newDate = new Date(currentDate)
-                newDate.setDate(currentDate.getDate() + (view === 'week' ? 7 : 1))
+                newDate.setDate(currentDate.getDate() + (view === 'semana' ? 7 : 1))
                 setCurrentDate(newDate)
               }}>
                 <ChevronRight className="h-4 w-4" />
               </Button>
             </div>
             <h2 className="font-semibold text-lg">
-              {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+              {currentDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}
             </h2>
-            <Button variant="outline" size="sm" onClick={() => setCurrentDate(new Date())}>Today</Button>
+            <Button variant="outline" size="sm" onClick={() => setCurrentDate(new Date())}>Hoy</Button>
           </div>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-accent"></span> Confirmed</span>
-            <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-primary"></span> Scheduled</span>
+            <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-accent"></span> Confirmada</span>
+            <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-primary"></span> Programada</span>
           </div>
         </div>
 
@@ -124,7 +124,7 @@ export default function CalendarPage() {
                 ))}
               </div>
 
-              {/* Grid Body (Simplified Time Slots) */}
+              {/* Grid Body */}
               <div className="relative">
                 {Array.from({ length: 12 }, (_, i) => i + 8).map((hour) => (
                   <div key={hour} className="grid grid-cols-[80px_repeat(7,1fr)] border-b h-20 group">
@@ -133,7 +133,6 @@ export default function CalendarPage() {
                     </div>
                     {Array.from({ length: 7 }, (_, dayIndex) => (
                       <div key={dayIndex} className="border-r last:border-r-0 relative group-hover:bg-secondary/5">
-                        {/* Mock Appointment Rendering */}
                         {MOCK_APPOINTMENTS.map((app) => {
                           const appDate = new Date(app.start_time)
                           const appHour = appDate.getHours()
@@ -143,7 +142,7 @@ export default function CalendarPage() {
                             return (
                               <div key={app.id} className={cn(
                                 "absolute inset-1 rounded p-2 text-[10px] border-l-4 shadow-sm z-10",
-                                app.status === 'confirmed' ? "bg-accent/10 border-accent text-accent-foreground" : "bg-primary/10 border-primary text-primary-foreground"
+                                app.status === 'confirmada' ? "bg-accent/10 border-accent text-accent-foreground" : "bg-primary/10 border-primary text-primary-foreground"
                               )}>
                                 <div className="font-bold flex justify-between items-start">
                                   <span className="truncate">{app.patient_name}</span>

@@ -21,12 +21,12 @@ export default function PatientsPage() {
       <main className="flex-1 p-8 overflow-y-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Patients</h1>
-            <p className="text-muted-foreground">Manage your clinic's patient database and history.</p>
+            <h1 className="text-3xl font-bold tracking-tight">Pacientes</h1>
+            <p className="text-muted-foreground">Gestiona la base de datos e historial de pacientes de tu clínica.</p>
           </div>
           <Button className="bg-accent hover:bg-accent/90">
             <Plus className="h-4 w-4 mr-2" />
-            Add Patient
+            Añadir Paciente
           </Button>
         </div>
 
@@ -35,24 +35,24 @@ export default function PatientsPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <input 
               type="text" 
-              placeholder="Search patients by name, email, phone..." 
+              placeholder="Buscar pacientes por nombre, email, teléfono..." 
               className="w-full bg-white border rounded-md py-2 pl-10 pr-4 outline-none focus:border-primary transition-all shadow-sm"
             />
           </div>
-          <Button variant="outline" className="bg-white">Filter</Button>
-          <Button variant="outline" className="bg-white">Export</Button>
+          <Button variant="outline" className="bg-white">Filtrar</Button>
+          <Button variant="outline" className="bg-white">Exportar</Button>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
           <Table>
             <TableHeader className="bg-secondary/20">
               <TableRow>
-                <TableHead className="w-[300px]">Patient</TableHead>
-                <TableHead>Contact</TableHead>
-                <TableHead>Source</TableHead>
-                <TableHead>Tags</TableHead>
-                <TableHead>Joined</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead className="w-[300px]">Paciente</TableHead>
+                <TableHead>Contacto</TableHead>
+                <TableHead>Origen</TableHead>
+                <TableHead>Etiquetas</TableHead>
+                <TableHead>Ingreso</TableHead>
+                <TableHead className="text-right">Acciones</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

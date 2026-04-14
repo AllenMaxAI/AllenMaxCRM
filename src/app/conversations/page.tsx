@@ -27,14 +27,14 @@ import { Button } from "@/components/ui/button"
 
 export default function ConversationsPage() {
   const [selectedConv, setSelectedConv] = useState(MOCK_CONVERSATIONS[0])
-  const [tab, setTab] = useState<'chats' | 'calls'>('chats')
+  const [tab, setTab] = useState<'chats' | 'llamadas'>('chats')
 
   const channelIcons: Record<string, any> = {
-    'Website Chatbot': Globe,
-    'WhatsApp Chatbot': Smartphone,
-    'Instagram Chatbot': Instagram,
-    'Facebook Chatbot': Facebook,
-    'Voice Agent': Phone,
+    'Chatbot Web': Globe,
+    'Chatbot WhatsApp': Smartphone,
+    'Chatbot Instagram': Instagram,
+    'Chatbot Facebook': Facebook,
+    'Agente de Voz': Phone,
   }
 
   return (
@@ -44,7 +44,7 @@ export default function ConversationsPage() {
         {/* Left List */}
         <div className="w-80 border-r bg-white flex flex-col">
           <div className="p-4 border-b">
-            <h1 className="text-xl font-bold mb-4">Interactions</h1>
+            <h1 className="text-xl font-bold mb-4">Interacciones</h1>
             <div className="flex gap-1 bg-secondary/50 p-1 rounded-lg mb-4">
               <button 
                 onClick={() => setTab('chats')}
@@ -53,17 +53,17 @@ export default function ConversationsPage() {
                 Chats
               </button>
               <button 
-                onClick={() => setTab('calls')}
-                className={cn("flex-1 py-1.5 text-xs font-medium rounded-md transition-all", tab === 'calls' ? "bg-white shadow-sm text-primary" : "text-muted-foreground")}
+                onClick={() => setTab('llamadas')}
+                className={cn("flex-1 py-1.5 text-xs font-medium rounded-md transition-all", tab === 'llamadas' ? "bg-white shadow-sm text-primary" : "text-muted-foreground")}
               >
-                Voice Calls
+                Llamadas de Voz
               </button>
             </div>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input 
                 type="text" 
-                placeholder="Search..." 
+                placeholder="Buscar..." 
                 className="w-full bg-secondary/20 rounded-md py-2 pl-9 pr-4 text-sm outline-none border focus:border-primary transition-colors"
               />
             </div>
@@ -105,7 +105,7 @@ export default function ConversationsPage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1">
                         <Phone className="h-3 w-3 text-accent" />
-                        <span className="text-[10px] uppercase font-bold tracking-wider opacity-60">VOICE AGENT</span>
+                        <span className="text-[10px] uppercase font-bold tracking-wider opacity-60">AGENTE DE VOZ</span>
                       </div>
                       <Badge variant="outline" className="text-[8px] h-4">{call.duration}</Badge>
                     </div>
@@ -132,9 +132,9 @@ export default function ConversationsPage() {
                 <div className="flex gap-2">
                   <Button variant="outline" size="sm" className="bg-white">
                     <Calendar className="h-4 w-4 mr-2" />
-                    History
+                    Historial
                   </Button>
-                  <Button size="sm" className="bg-accent">Profile</Button>
+                  <Button size="sm" className="bg-accent">Perfil</Button>
                 </div>
               </div>
 
@@ -142,18 +142,18 @@ export default function ConversationsPage() {
                 {MOCK_MESSAGES.map((msg) => (
                   <div key={msg.id} className={cn(
                     "flex flex-col max-w-[70%]",
-                    msg.sender === 'patient' ? "mr-auto items-start" : "ml-auto items-end"
+                    msg.sender === 'paciente' ? "mr-auto items-start" : "ml-auto items-end"
                   )}>
                     <div className={cn(
                       "rounded-2xl px-4 py-2 text-sm shadow-sm",
-                      msg.sender === 'patient' 
+                      msg.sender === 'paciente' 
                         ? "bg-white text-foreground rounded-tl-none border" 
                         : "bg-primary text-primary-foreground rounded-tr-none"
                     )}>
                       {msg.message}
                     </div>
                     <span className="text-[10px] mt-1 text-muted-foreground flex items-center gap-1">
-                      {msg.sender === 'AI' && <Bot className="h-3 w-3" />}
+                      {msg.sender === 'IA' && <Bot className="h-3 w-3" />}
                       {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
@@ -164,7 +164,7 @@ export default function ConversationsPage() {
                 <div className="relative">
                   <input 
                     type="text" 
-                    placeholder="This is a read-only AI history. Direct intervention coming soon..." 
+                    placeholder="Este es un historial de IA de solo lectura. Intervención directa próximamente..." 
                     disabled
                     className="w-full bg-secondary/20 rounded-lg py-3 pl-4 pr-12 text-sm italic"
                   />
@@ -181,39 +181,39 @@ export default function ConversationsPage() {
                   <div className="flex items-center justify-between">
                     <CardTitle className="flex items-center gap-2">
                       <Phone className="h-5 w-5" />
-                      Voice Call Transcript
+                      Transcripción de Llamada
                     </CardTitle>
                     <Badge variant="outline" className="border-white text-white">2023-12-07</Badge>
                   </div>
                 </CardHeader>
                 <CardContent className="p-6 space-y-6">
                   <div>
-                    <h4 className="text-xs uppercase font-bold text-muted-foreground mb-2">AI Summary</h4>
+                    <h4 className="text-xs uppercase font-bold text-muted-foreground mb-2">Resumen IA</h4>
                     <p className="text-sm bg-accent/5 p-4 rounded-lg border border-accent/20 italic">
                       "{MOCK_VOICE_CALLS[0].summary}"
                     </p>
                   </div>
                   <div>
-                    <h4 className="text-xs uppercase font-bold text-muted-foreground mb-4">Transcript</h4>
+                    <h4 className="text-xs uppercase font-bold text-muted-foreground mb-4">Transcripción</h4>
                     <div className="space-y-4 max-h-96 overflow-y-auto pr-4 text-sm leading-relaxed">
                       {MOCK_VOICE_CALLS[0].transcript.split('. ').map((sentence, i) => (
                         <p key={i} className="border-l-2 border-secondary pl-4 py-1">
-                          {sentence.includes('Michael:') ? (
-                            <span className="font-bold text-primary">Patient: </span>
+                          {sentence.includes('Miguel:') ? (
+                            <span className="font-bold text-primary">Paciente: </span>
                           ) : (
-                            <span className="font-bold text-accent">AI: </span>
+                            <span className="font-bold text-accent">IA: </span>
                           )}
-                          {sentence.replace(/Michael:|AI:/, '')}.
+                          {sentence.replace(/Miguel:|IA:/, '')}.
                         </p>
                       ))}
                     </div>
                   </div>
                   <div className="flex justify-between items-center pt-4 border-t">
                     <div className="text-xs text-muted-foreground">
-                      Duration: <span className="font-bold">{MOCK_VOICE_CALLS[0].duration}</span>
+                      Duración: <span className="font-bold">{MOCK_VOICE_CALLS[0].duration}</span>
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      Intent Detected: <Badge variant="secondary" className="ml-2">{MOCK_VOICE_CALLS[0].intent}</Badge>
+                      Intención Detectada: <Badge variant="secondary" className="ml-2">{MOCK_VOICE_CALLS[0].intent}</Badge>
                     </div>
                   </div>
                 </CardContent>

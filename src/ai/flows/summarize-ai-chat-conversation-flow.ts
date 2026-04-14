@@ -1,10 +1,10 @@
 'use server';
 /**
- * @fileOverview A Genkit flow for summarizing AI chatbot conversations.
+ * @fileOverview Un flujo de Genkit para resumir conversaciones de chatbots de IA.
  *
- * - summarizeAiChatConversation - A function that handles the summarization process.
- * - SummarizeAiChatConversationInput - The input type for the summarizeAiChatConversation function.
- * - SummarizeAiChatConversationOutput - The return type for the summarizeAiChatConversation function.
+ * - summarizeAiChatConversation - Una función que maneja el proceso de resumen.
+ * - SummarizeAiChatConversationInput - El tipo de entrada para la función summarizeAiChatConversation.
+ * - SummarizeAiChatConversationOutput - El tipo de retorno para la función summarizeAiChatConversation.
  */
 
 import {ai} from '@/ai/genkit';
@@ -13,15 +13,15 @@ import {z} from 'genkit';
 const SummarizeAiChatConversationInputSchema = z.object({
   messages: z.array(
     z.object({
-      sender: z.string().describe('The sender of the message (e.g., "patient", "AI").'),
-      message: z.string().describe('The content of the message.'),
+      sender: z.string().describe('El remitente del mensaje (ej. "paciente", "IA").'),
+      message: z.string().describe('El contenido del mensaje.'),
     })
-  ).describe('The full conversation thread between the patient and the AI system.'),
+  ).describe('El hilo completo de la conversación entre el paciente y el sistema de IA.'),
 });
 export type SummarizeAiChatConversationInput = z.infer<typeof SummarizeAiChatConversationInputSchema>;
 
 const SummarizeAiChatConversationOutputSchema = z.object({
-  summary: z.string().describe('A concise summary of the conversation thread.'),
+  summary: z.string().describe('Un resumen conciso del hilo de la conversación.'),
 });
 export type SummarizeAiChatConversationOutput = z.infer<typeof SummarizeAiChatConversationOutputSchema>;
 
@@ -33,11 +33,11 @@ const summarizeAiChatConversationPrompt = ai.definePrompt({
   name: 'summarizeAiChatConversationPrompt',
   input: {schema: SummarizeAiChatConversationInputSchema},
   output: {schema: SummarizeAiChatConversationOutputSchema},
-  prompt: `You are an AI assistant tasked with summarizing conversation threads between a patient and an AI chatbot.
-Your goal is to provide a concise summary that captures the main purpose of the conversation and any key outcomes or important information.
-Focus on extracting critical details such as patient inquiries, AI responses, appointments made or discussed, and any resolutions or next steps.
+  prompt: `Eres un asistente de IA encargado de resumir hilos de conversación entre un paciente y un chatbot de IA.
+Tu objetivo es proporcionar un resumen conciso que capture el propósito principal de la conversación y cualquier resultado clave o información importante.
+Concéntrate en extraer detalles críticos como consultas de pacientes, respuestas de la IA, citas programadas o discutidas, y cualquier resolución o paso siguiente.
 
-Conversation Thread:
+Hilo de la Conversación:
 {{#each messages}}
 {{{sender}}}: {{{message}}}
 {{/each}}`,
