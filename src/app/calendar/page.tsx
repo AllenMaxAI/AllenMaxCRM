@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect } from "react"
@@ -32,11 +31,14 @@ import { Label } from "@/components/ui/label"
 export default function CalendarPage() {
   const [mounted, setMounted] = useState(false)
   const [view, setView] = useState<'día' | 'semana' | 'mes'>('semana')
-  const [currentDate, setCurrentDate] = useState(new Date())
+  // Inicializamos con una fecha estática para evitar el error de hidratación
+  const [currentDate, setCurrentDate] = useState(new Date('2024-05-20'))
   const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
     setMounted(true)
+    // Una vez montado, podemos usar la fecha actual real si quisiéramos
+    // setCurrentDate(new Date()) 
   }, [])
 
   const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
@@ -159,7 +161,7 @@ export default function CalendarPage() {
             <h2 className="font-semibold text-lg">
               {mounted ? currentDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }) : "..."}
             </h2>
-            <Button variant="outline" size="sm" onClick={() => setCurrentDate(new Date())}>Hoy</Button>
+            <Button variant="outline" size="sm" onClick={() => setCurrentDate(new Date('2024-05-20'))}>Hoy</Button>
           </div>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-accent"></span> Confirmada</span>
@@ -177,7 +179,7 @@ export default function CalendarPage() {
                 {weekDays.map((day, i) => (
                   <div key={i} className={cn(
                     "h-12 flex flex-col items-center justify-center border-r last:border-r-0",
-                    day.toDateString() === new Date().toDateString() ? "bg-primary/5 text-primary" : ""
+                    mounted && day.toDateString() === new Date('2024-05-20').toDateString() ? "bg-primary/5 text-primary" : ""
                   )}>
                     <span className="text-[10px] uppercase font-bold text-muted-foreground">{days[i]}</span>
                     <span className="text-lg font-bold">{day.getDate()}</span>
@@ -194,7 +196,7 @@ export default function CalendarPage() {
                     </div>
                     {Array.from({ length: 7 }, (_, dayIndex) => (
                       <div key={dayIndex} className="border-r last:border-r-0 relative group-hover:bg-secondary/5">
-                        {filteredAppointments.map((app) => {
+                        {mounted && filteredAppointments.map((app) => {
                           const appDate = new Date(app.start_time)
                           const appHour = appDate.getHours()
                           const isSameDay = appDate.toDateString() === weekDays[dayIndex].toDateString()

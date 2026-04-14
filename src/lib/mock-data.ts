@@ -106,6 +106,10 @@ export const MOCK_PATIENTS: Patient[] = [
   },
 ];
 
+// Usamos fechas estáticas para evitar errores de hidratación
+const today = new Date('2024-05-20');
+const tomorrow = new Date('2024-05-21');
+
 export const MOCK_APPOINTMENTS: Appointment[] = [
   {
     id: 'a1',
@@ -113,8 +117,8 @@ export const MOCK_APPOINTMENTS: Appointment[] = [
     patient_id: 'p1',
     patient_name: 'Sara García',
     title: 'Limpieza Rutinaria',
-    start_time: new Date(new Date().setHours(9, 0, 0)).toISOString(),
-    end_time: new Date(new Date().setHours(10, 0, 0)).toISOString(),
+    start_time: new Date(today.setHours(9, 0, 0)).toISOString(),
+    end_time: new Date(today.setHours(10, 0, 0)).toISOString(),
     dentist: 'Dra. Emily Smith',
     status: 'programada',
     source: 'Chatbot Web',
@@ -127,8 +131,8 @@ export const MOCK_APPOINTMENTS: Appointment[] = [
     patient_id: 'p2',
     patient_name: 'Miguel Chen',
     title: 'Consulta Blanqueamiento',
-    start_time: new Date(new Date().setHours(11, 30, 0)).toISOString(),
-    end_time: new Date(new Date().setHours(12, 0, 0)).toISOString(),
+    start_time: new Date(today.setHours(11, 30, 0)).toISOString(),
+    end_time: new Date(today.setHours(12, 0, 0)).toISOString(),
     dentist: 'Dra. Emily Smith',
     status: 'confirmada',
     source: 'Agente de Voz',
@@ -141,8 +145,8 @@ export const MOCK_APPOINTMENTS: Appointment[] = [
     patient_id: 'p3',
     patient_name: 'Emma Wilson',
     title: 'Empaste de Urgencia',
-    start_time: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(),
-    end_time: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(),
+    start_time: new Date(tomorrow.setHours(10, 0, 0)).toISOString(),
+    end_time: new Date(tomorrow.setHours(11, 0, 0)).toISOString(),
     dentist: 'Dr. Alan Brown',
     status: 'programada',
     source: 'Chatbot WhatsApp',
