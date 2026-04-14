@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { SidebarNav } from "@/components/layout/sidebar-nav"
 import { 
   Table, 
@@ -15,6 +16,12 @@ import { Button } from "@/components/ui/button"
 import { Search, Plus, User, MoreHorizontal, Mail, Phone, Calendar } from "lucide-react"
 
 export default function PatientsPage() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   return (
     <div className="flex min-h-screen bg-background">
       <SidebarNav />
@@ -96,7 +103,7 @@ export default function PatientsPage() {
                     </div>
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">
-                    {new Date(patient.created_at).toLocaleDateString()}
+                    {mounted ? new Date(patient.created_at).toLocaleDateString() : "---"}
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">

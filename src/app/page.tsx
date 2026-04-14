@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { SidebarNav } from "@/components/layout/sidebar-nav"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { 
@@ -15,6 +16,12 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 
 export default function Dashboard() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const todayAppointments = MOCK_APPOINTMENTS.filter(a => {
     const today = new Date().toDateString()
     return new Date(a.start_time).toDateString() === today
@@ -72,8 +79,12 @@ export default function Dashboard() {
                   <div key={app.id} className="flex items-center justify-between rounded-lg border p-4 transition-colors hover:bg-secondary/20">
                     <div className="flex items-center gap-4">
                       <div className="flex h-10 w-10 flex-col items-center justify-center rounded-md bg-secondary text-primary font-bold">
-                        <span className="text-xs uppercase">{new Date(app.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }).split(':')[0]}</span>
-                        <span className="text-[10px]">{new Date(app.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }).split(':')[1]}</span>
+                        <span className="text-xs uppercase">
+                          {mounted ? new Date(app.start_time).toLocaleTimeString([], { hour: '2-digit', hour12: false }).split(':')[0] : "--"}
+                        </span>
+                        <span className="text-[10px]">
+                          {mounted ? new Date(app.start_time).toLocaleTimeString([], { minute: '2-digit' }) : "--"}
+                        </span>
                       </div>
                       <div>
                         <p className="font-semibold">{app.patient_name}</p>
@@ -106,7 +117,7 @@ export default function Dashboard() {
                       <p className="font-semibold text-primary">{conv.patient_name}</p>
                       <span className="text-[10px] text-muted-foreground flex items-center gap-1">
                         <Clock className="h-3 w-3" />
-                        {new Date(conv.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        {mounted ? new Date(conv.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "--:--"}
                       </span>
                     </div>
                     <p className="line-clamp-1 text-sm text-muted-foreground">{conv.last_message}</p>

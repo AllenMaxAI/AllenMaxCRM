@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { SidebarNav } from "@/components/layout/sidebar-nav"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -18,8 +18,13 @@ import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 
 export default function CalendarPage() {
+  const [mounted, setMounted] = useState(false)
   const [view, setView] = useState<'día' | 'semana' | 'mes'>('semana')
   const [currentDate, setCurrentDate] = useState(new Date())
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
   
@@ -96,7 +101,7 @@ export default function CalendarPage() {
               </Button>
             </div>
             <h2 className="font-semibold text-lg">
-              {currentDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}
+              {mounted ? currentDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }) : "..."}
             </h2>
             <Button variant="outline" size="sm" onClick={() => setCurrentDate(new Date())}>Hoy</Button>
           </div>

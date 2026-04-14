@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { SidebarNav } from "@/components/layout/sidebar-nav"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { 
@@ -26,8 +26,13 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
 export default function ConversationsPage() {
+  const [mounted, setMounted] = useState(false)
   const [selectedConv, setSelectedConv] = useState(MOCK_CONVERSATIONS[0])
   const [tab, setTab] = useState<'chats' | 'llamadas'>('chats')
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const channelIcons: Record<string, any> = {
     'Chatbot Web': Globe,
@@ -84,7 +89,9 @@ export default function ConversationsPage() {
                   >
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-semibold">{conv.patient_name}</span>
-                      <span className="text-[10px] text-muted-foreground">{new Date(conv.updated_at).toLocaleDateString()}</span>
+                      <span className="text-[10px] text-muted-foreground">
+                        {mounted ? new Date(conv.updated_at).toLocaleDateString() : "--"}
+                      </span>
                     </div>
                     <p className="text-xs text-muted-foreground line-clamp-1 mb-2">{conv.last_message}</p>
                     <div className="flex items-center gap-1">
@@ -99,7 +106,9 @@ export default function ConversationsPage() {
                 <div key={call.id} className="p-4 border-b hover:bg-secondary/30 cursor-pointer">
                    <div className="flex items-center justify-between mb-1">
                       <span className="font-semibold">{call.phone_number}</span>
-                      <span className="text-[10px] text-muted-foreground">{new Date(call.timestamp).toLocaleDateString()}</span>
+                      <span className="text-[10px] text-muted-foreground">
+                        {mounted ? new Date(call.timestamp).toLocaleDateString() : "--"}
+                      </span>
                     </div>
                     <p className="text-xs text-muted-foreground line-clamp-1 mb-2">{call.summary}</p>
                     <div className="flex items-center justify-between">
@@ -154,7 +163,7 @@ export default function ConversationsPage() {
                     </div>
                     <span className="text-[10px] mt-1 text-muted-foreground flex items-center gap-1">
                       {msg.sender === 'IA' && <Bot className="h-3 w-3" />}
-                      {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {mounted ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "--:--"}
                     </span>
                   </div>
                 ))}
