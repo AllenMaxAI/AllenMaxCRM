@@ -24,11 +24,6 @@
     --input: 199 20% 85%;
     --ring: 199 50% 45%;
     --radius: 0.75rem;
-    --chart-1: 199 50% 45%;
-    --chart-2: 170 80% 45%;
-    --chart-3: 199 20% 35%;
-    --chart-4: 170 60% 60%;
-    --chart-5: 199 40% 55%;
   }
 }
 
@@ -39,13 +34,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-}
-
-.calendar-day-cell {
-  min-height: 120px;
 }
