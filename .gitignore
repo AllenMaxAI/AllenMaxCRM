@@ -32,3 +32,22 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# firebase
+.firebase/
+.firebaserc
+
+# scratch and migration scripts
+check_*.js
+check_*.ts
+clean_*.ts
+final_migrate.js
+find_user.js
+fix*.js
+fix*.ts
+migrate*.js
+migrate*.ts
+normalize*.js
+safe_migrate.js
+test_*.js
+test_*.ts

@@ -1,0 +1,7 @@
+{
+  "message": "test",
+  "sessionId": "test_1",
+  "userProfile": {
+    "name": "Tester"
+  }
+}

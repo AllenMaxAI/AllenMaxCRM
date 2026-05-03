@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Bloquear todo acceso por defecto
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Un usuario autenticado tiene control total sobre su clínica
+    match /users/{userId}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Permitir a n8n y otros servicios externos gestionar mensajes, conversaciones y pacientes
+    // (Esto desbloquea el flujo completo del chatbot)
+    match /users/{userId}/messages/{messageId} {
+      allow read, create: if true;
+    }
+    match /users/{userId}/conversations/{conversationId} {
+      allow read, create, update: if true;
+    }
+    match /users/{userId}/patients/{patientId} {
+      allow read, create, update: if true;
+    }
+
+    match /users/{userId}/calls/{callId} {
+      allow read, create, update: if true;
+    }
+
+    // La configuración pública de la clínica es legible sin autenticación
+    match /users/{userId}/settings/global {
+      allow read: if true;
+    }
+  }
+}

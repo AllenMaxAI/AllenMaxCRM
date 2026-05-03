@@ -1,0 +1,320 @@
+{
+  "conversations": [
+    {
+      "id": "topdentist-session-4zeof",
+      "clinic_id": "clinica_001",
+      "patient_id": "p_topdentist-session-4zeof",
+      "patient_name": "Tumadre Fea Gotda",
+      "channel": "n8n Chatbot",
+      "contact_identifier": "topdentist-session-4zeof",
+      "last_message": "No estoy preparado para responder a ese mensaje. Si tienes alguna duda o si quieres agendar una cita, estaré aquí para ayudarte.",
+      "updated_at": "2026-04-25T01:24:30.850Z"
+    },
+    {
+      "id": "topdentist-session-3rzkio",
+      "clinic_id": "clinica_001",
+      "patient_id": "p_topdentist-session-3rzkio",
+      "patient_name": "Javi",
+      "channel": "n8n Chatbot",
+      "contact_identifier": "topdentist-session-3rzkio",
+      "last_message": "[SHOW_MY_APPOINTMENTS]",
+      "updated_at": "2026-04-25T02:11:04.842Z"
+    }
+  ],
+  "messages": [
+    {
+      "id": "m_1777079574210",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "hola creo q tengo caca",
+      "timestamp": "2026-04-25T01:12:54.210Z"
+    },
+    {
+      "id": "m_1777079574616",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "Hola, no estoy preparado para responder a ese mensaje. Si tienes alguna duda o si quieres agendar una cita, estaré encantado de ayudarte.",
+      "timestamp": "2026-04-25T01:12:54.616Z"
+    },
+    {
+      "id": "m_1777079580980",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "mmm",
+      "timestamp": "2026-04-25T01:13:00.979Z"
+    },
+    {
+      "id": "m_1777079581363",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "No estoy preparado para responder a ese mensaje. Si tienes alguna duda o si quieres agendar una cita, estaré aquí para ayudarte.",
+      "timestamp": "2026-04-25T01:13:01.363Z"
+    },
+    {
+      "id": "m_1777079592080",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "me sangra muxo la ensia",
+      "timestamp": "2026-04-25T01:13:12.080Z"
+    },
+    {
+      "id": "m_1777079592455",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "Lamento saber que estás teniendo ese problema. No estoy preparado para responder a ese mensaje, pero si tienes alguna duda o si quieres agendar una cita, estaré encantado de ayudarte.",
+      "timestamp": "2026-04-25T01:13:12.455Z"
+    },
+    {
+      "id": "m_1777079612253",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "que tratamiento teneis pa ezo :(",
+      "timestamp": "2026-04-25T01:13:32.253Z"
+    },
+    {
+      "id": "m_1777079612624",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "El tratamiento para el sangrado de encías en Topdentist se enmarca dentro de la especialidad de Periodoncia. La causa más común de este síntoma es la gingivitis, que es una inflamación, sangrado e irritación de las encías. Si se trata a tiempo, la gingivitis es reversible. Un tratamiento correcto puede eliminar las molestias y mejorar el estado general de la dentadura. \n\nTe recomendaría contactar directamente con Topdentist para obtener más información específica sobre el tratamiento. Si deseas agendar una cita, estaré encantado de ayudarte.",
+      "timestamp": "2026-04-25T01:13:32.624Z"
+    },
+    {
+      "id": "m_1777079625760",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "kiero sita",
+      "timestamp": "2026-04-25T01:13:45.760Z"
+    },
+    {
+      "id": "m_1777079626143",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "¡Claro! Por favor, completa este formulario para agendar tu cita: [SHOW_BOOKING_FORM].",
+      "timestamp": "2026-04-25T01:13:46.143Z"
+    },
+    {
+      "id": "m_1777079666675",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "Agendar cita para Pene Flacido Cornudo - Tel: +34 696 96 96 96 - Servicio: Periodoncia - Fecha: 28/04/2026, 13:00 - Comentarios: me pka el pito xico",
+      "timestamp": "2026-04-25T01:14:26.675Z"
+    },
+    {
+      "id": "m_1777079667085",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "¡Listo! Tu cita ha sido agendada. Te esperamos el 28/04/2026 a las 13:00 para Periodoncia. \n\nPuedes añadirla a tu calendario [aquí](https://www.google.com/calendar/event?eid=ZTRwNGo5NjkyNWhucWdzZDRmZWU0cXUzcDQgY19kMzUyNzVmNDY2NzBlYmFkZjRjMTJmYzk3ZDRkYjNiNzdhMjc0YTI2OWIyNjhhNzYxNmQwZmVjNDU1MmMxZjIxQGc).\n\nSi necesitas algo más, no dudes en decírmelo.",
+      "timestamp": "2026-04-25T01:14:27.085Z"
+    },
+    {
+      "id": "m_1777079728024",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "oye pk deveria konfia en vzotro",
+      "timestamp": "2026-04-25T01:15:28.024Z"
+    },
+    {
+      "id": "m_1777079728408",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "No estoy preparado para responder a ese mensaje. Si tienes alguna duda o si quieres agendar una cita, estaré aquí para ayudarte.",
+      "timestamp": "2026-04-25T01:15:28.407Z"
+    },
+    {
+      "id": "m_1777079737467",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "pq deberia confiar en vosotros",
+      "timestamp": "2026-04-25T01:15:37.467Z"
+    },
+    {
+      "id": "m_1777079737838",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "No estoy preparado para responder a ese mensaje. Si tienes alguna duda o si quieres agendar una cita, estaré aquí para ayudarte.",
+      "timestamp": "2026-04-25T01:15:37.838Z"
+    },
+    {
+      "id": "m_1777079743126",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "pos tusmuertos",
+      "timestamp": "2026-04-25T01:15:43.126Z"
+    },
+    {
+      "id": "m_1777079743525",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "No estoy preparado para responder a ese mensaje. Si tienes alguna duda o si quieres agendar una cita, estaré aquí para ayudarte.",
+      "timestamp": "2026-04-25T01:15:43.525Z"
+    },
+    {
+      "id": "m_1777079748912",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "venga hdp respodne",
+      "timestamp": "2026-04-25T01:15:48.912Z"
+    },
+    {
+      "id": "m_1777079749283",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "No estoy preparado para responder a ese mensaje. Si tienes alguna duda o si quieres agendar una cita, estaré aquí para ayudarte.",
+      "timestamp": "2026-04-25T01:15:49.283Z"
+    },
+    {
+      "id": "m_1777079753057",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "te reviento",
+      "timestamp": "2026-04-25T01:15:53.057Z"
+    },
+    {
+      "id": "m_1777079753430",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "No estoy preparado para responder a ese mensaje. Si tienes alguna duda o si quieres agendar una cita, estaré aquí para ayudarte.",
+      "timestamp": "2026-04-25T01:15:53.430Z"
+    },
+    {
+      "id": "m_1777079774964",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "kiero kamgbiar la sita",
+      "timestamp": "2026-04-25T01:16:14.964Z"
+    },
+    {
+      "id": "m_1777079775362",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "[SHOW_MY_APPOINTMENTS]",
+      "timestamp": "2026-04-25T01:16:15.362Z"
+    },
+    {
+      "id": "m_1777079799177",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "Modificar cita - ANTERIOR: Nombre: {Pene Flacido Cornudo} | Tel: {+34 696 96 96 96} | Servicio: {Periodoncia} | Fecha: {28/04/2026, 13:00} | Comentarios: {Ninguno} --- NUEVA: Nombre: {Pene Flacido Cornudo} | Tel: {+34 696 96 96 96} | Servicio: {Periodoncia} | Fecha: {30/04/2026, 14:00} | Comentarios: {el pito xiko m sigue pikando}",
+      "timestamp": "2026-04-25T01:16:39.177Z"
+    },
+    {
+      "id": "m_1777079799552",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "¡Listo! Tu cita ha sido actualizada. Te esperamos el 30/04/2026 a las 14:00 para Periodoncia. \n\nPuedes añadirla a tu calendario [aquí](https://www.google.com/calendar/event?eid=aGNvZ2Jmb3ExMTlxbXQxc2RhZm50Mmt0cWMgY19kMzUyNzVmNDY2NzBlYmFkZjRjMTJmYzk3ZDRkYjNiNzdhMjc0YTI2OWIyNjhhNzYxNmQwZmVjNDU1MmMxZjIxQGc).",
+      "timestamp": "2026-04-25T01:16:39.552Z"
+    },
+    {
+      "id": "m_1777079805936",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "pop llevate esta",
+      "timestamp": "2026-04-25T01:16:45.936Z"
+    },
+    {
+      "id": "m_1777079806315",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "No estoy preparado para responder a ese mensaje. Si tienes alguna duda o si quieres agendar una cita, estaré aquí para ayudarte.",
+      "timestamp": "2026-04-25T01:16:46.315Z"
+    },
+    {
+      "id": "m_1777079969427",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "kiero edita lo datoh",
+      "timestamp": "2026-04-25T01:19:29.427Z"
+    },
+    {
+      "id": "m_1777079969813",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "No estoy preparado para responder a ese mensaje. Si tienes alguna duda o si quieres agendar una cita, estaré aquí para ayudarte.",
+      "timestamp": "2026-04-25T01:19:29.813Z"
+    },
+    {
+      "id": "m_1777079993552",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "quiero cambiar los datos de mi cita",
+      "timestamp": "2026-04-25T01:19:53.552Z"
+    },
+    {
+      "id": "m_1777079994021",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "[SHOW_MY_APPOINTMENTS]",
+      "timestamp": "2026-04-25T01:19:54.021Z"
+    },
+    {
+      "id": "m_1777080012919",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "tusmerto",
+      "timestamp": "2026-04-25T01:20:12.919Z"
+    },
+    {
+      "id": "m_1777080013302",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "No estoy preparado para responder a ese mensaje. Si tienes alguna duda o si quieres agendar una cita, estaré aquí para ayudarte.",
+      "timestamp": "2026-04-25T01:20:13.302Z"
+    },
+    {
+      "id": "m_1777080265878",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "tyusmuerto hdp",
+      "timestamp": "2026-04-25T01:24:25.878Z"
+    },
+    {
+      "id": "m_1777080266287",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "No estoy preparado para responder a ese mensaje. Si tienes alguna duda o si quieres agendar una cita, estaré aquí para ayudarte.",
+      "timestamp": "2026-04-25T01:24:26.287Z"
+    },
+    {
+      "id": "m_1777080267850",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "y a matar",
+      "timestamp": "2026-04-25T01:24:27.850Z"
+    },
+    {
+      "id": "m_1777080268262",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "No estoy preparado para responder a ese mensaje. Si tienes alguna duda o si quieres agendar una cita, estaré aquí para ayudarte.",
+      "timestamp": "2026-04-25T01:24:28.262Z"
+    },
+    {
+      "id": "m_1777080270473",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "paciente",
+      "message": "voy a matar",
+      "timestamp": "2026-04-25T01:24:30.473Z"
+    },
+    {
+      "id": "m_1777080270850",
+      "conversation_id": "topdentist-session-4zeof",
+      "sender": "IA",
+      "message": "No estoy preparado para responder a ese mensaje. Si tienes alguna duda o si quieres agendar una cita, estaré aquí para ayudarte.",
+      "timestamp": "2026-04-25T01:24:30.850Z"
+    },
+    {
+      "id": "m_1777083064409",
+      "conversation_id": "topdentist-session-3rzkio",
+      "sender": "paciente",
+      "message": "Listar citas",
+      "timestamp": "2026-04-25T02:11:04.408Z"
+    },
+    {
+      "id": "m_1777083064842",
+      "conversation_id": "topdentist-session-3rzkio",
+      "sender": "IA",
+      "message": "[SHOW_MY_APPOINTMENTS]",
+      "timestamp": "2026-04-25T02:11:04.842Z"
+    }
+  ]
+}
