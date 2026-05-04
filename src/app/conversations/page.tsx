@@ -52,8 +52,8 @@ const CHANNEL_MAP: Record<string, string> = {
 const normalizeChannel = (channel: string): string =>
   CHANNEL_MAP[channel] ?? channel;
 
-const formatPhone = (phone: string | undefined | null) => {
-  if (!phone) return "";
+const formatPhone = (phone: string | undefined | null, showPlaceholder = false) => {
+  if (!phone || phone === "7") return showPlaceholder ? "NÚMERO DESCONOCIDO" : "";
   let cleaned = phone.trim().replace(/\s+/g, "");
   // Specific fix for Spanish numbers starting with 62 misidentified as Indonesian (+62)
   if (cleaned.startsWith('+6262')) {
@@ -856,8 +856,8 @@ export default function ConversationsPage() {
                               </h2>
                               <p className="text-[9px] uppercase font-black text-slate-400 tracking-widest">
                                 {normalizeChannel(selectedConv.channel)}
-                                {(selectedConv.patient_phone || (!selectedConv.channel.includes('Web') && selectedConv.contact_identifier)) && (
-                                  <span className="ml-1">• {formatPhone(selectedConv.patient_phone || selectedConv.contact_identifier)}</span>
+                                {(selectedConv.patient_phone || selectedConv.contact_identifier) && (
+                                  <span className="ml-1">• {formatPhone(selectedConv.patient_phone || selectedConv.contact_identifier, true)}</span>
                                 )}
                               </p>
                             </div>
@@ -994,7 +994,7 @@ export default function ConversationsPage() {
                           </h2>
                         </div>
                         <p className="text-[9px] uppercase font-black text-white/40 tracking-widest mt-0.5">
-                          Agente de voz • {formatPhone(selectedCall.phone_number)}
+                          Agente de voz • {formatPhone(selectedCall.phone_number, true)}
                         </p>
                       </div>
                     </div>
@@ -1696,7 +1696,7 @@ export default function ConversationsPage() {
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-slate-50 dark:bg-accent/10 rounded-xl"><Phone className="h-4 w-4 text-slate-400" /></div>
                   <span className="text-sm font-bold text-slate-600 dark:text-slate-300">
-                    {selectedPatient.phone && selectedPatient.phone.replace(/\D/g, '').length > 3 ? formatPhone(selectedPatient.phone) : "N/A"}
+                    {selectedPatient.phone && selectedPatient.phone.replace(/\D/g, '').length > 3 ? formatPhone(selectedPatient.phone, true) : "NÚMERO DESCONOCIDO"}
                   </span>
                 </div>
                 <div className="flex items-center gap-3">

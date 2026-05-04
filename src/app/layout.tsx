@@ -69,7 +69,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es" className="dark" suppressHydrationWarning>
+    <html lang="es" className="light" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -80,7 +80,7 @@ export default function RootLayout({
       <body className={`${inter.className} bg-background text-foreground antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
           themes={['light', 'dark', 'elite-dark', 'system']}
