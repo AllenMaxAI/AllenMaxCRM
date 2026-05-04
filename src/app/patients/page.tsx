@@ -1033,24 +1033,43 @@ export default function PatientsPage() {
                       <span className="text-sm font-black text-slate-900 dark:text-slate-50">
                         {(() => {
                           const cleanPPhone = patient.phone?.replace(/\D/g, '') || "";
-                          const chatCount = conversations.filter(c => 
-                            c.patient_id === patient.id || 
-                            (c.contact_identifier?.replace(/\D/g, '') && cleanPPhone && (c.contact_identifier.replace(/\D/g, '').endsWith(cleanPPhone) || cleanPPhone.endsWith(c.contact_identifier.replace(/\D/g, ''))))
+                          const chatCount = conversations.filter(c => {
+                            const cleanConvPhone = c.contact_identifier?.replace(/\D/g, '') || ""; 
+                            return c.patient_id === patient.id || ( 
+                              cleanPPhone.length >= 7 && cleanConvPhone.length >= 7 && (
+                                cleanPPhone.endsWith(cleanConvPhone) || cleanConvPhone.endsWith(cleanPPhone)
+                              )
                           ).length;
-                          const callCount = calls.filter(c => 
-                            c.patient_id === patient.id ||
-                            (c.phone_number?.replace(/\D/g, '') && cleanPPhone && (c.phone_number.replace(/\D/g, '').endsWith(cleanPPhone) || cleanPPhone.endsWith(c.phone_number.replace(/\D/g, ''))))
+                          const callCount = calls.filter(c => {
+                            const cleanCallPhone = c.phone_number?.replace(/\D/g, '') || ""; 
+                                                        return c.patient_id === patient.id || (
+                              cleanPPhone.length >= 7 && cleanCallPhone.length >= 7 && (
+                                cleanPPhone.endsWith(cleanCallPhone) || cleanCallPhone.endsWith(cleanPPhone)
+                              )
                           ).length;
                           const trashedCount = trash.filter(t => {
+                                                        const matchById = t.patient_id === patient.id;
+                            let matchByPhone = false;
+
                             if (t.type === 'conversation' && t.data.conversation) {
-                              return t.data.conversation.patient_id === patient.id || 
-                                     (t.data.conversation.contact_identifier?.replace(/\D/g, '') && cleanPPhone && (t.data.conversation.contact_identifier.replace(/\D/g, '').endsWith(cleanPPhone) || cleanPPhone.endsWith(t.data.conversation.contact_identifier.replace(/\D/g, ''))));
+                                                            const cleanConvPhone = t.data.conversation.contact_identifier?.replace(/\D/g, '') || ""; 
+                                                                                                 matchByPhone = cleanPPhone.length >= 7 && cleanConvPhone.length >= 7 && (
+                                cleanPPhone.endsWith(cleanConvPhone) || cleanConvPhone.endsWith(cleanPPhone)
+                              );
                             }
-                            if (t.type === 'call' && t.data.call) {
-                              return t.data.call.patient_id === patient.id || 
-                                     (t.data.call.phone_number?.replace(/\D/g, '') && cleanPPhone && (t.data.call.phone_number.replace(/\D/g, '').endsWith(cleanPPhone) || cleanPPhone.endsWith(t.data.call.phone_number.replace(/\D/g, ''))));
+                                                        else if (t.type === 'call' && t.data.call) {
+                                                            const cleanCallPhone = t.data.call.phone_number?.replace(/\D/g, '') || ""; 
+                                                                   matchByPhone = cleanPPhone.length >= 7 && cleanCallPhone.length >= 7 && (
+                                cleanPPhone.endsWith(cleanCallPhone) || cleanCallPhone.endsWith(cleanPPhone)
+                              );
                             }
-                            return false;
+                            else if (t.type === 'appointment' && t.data.appointment) {
+                              const cleanAppPhone = t.data.appointment.patient_phone?.replace(/\D/g, '') || "";
+                              matchByPhone = cleanPPhone.length >= 7 && cleanAppPhone.length >= 7 && (
+                                cleanPPhone.endsWith(cleanAppPhone) || cleanAppPhone.endsWith(cleanPPhone)
+                              );
+                            }
+                            return matchById || matchByPhone;
                           }).length;
                           return chatCount + callCount + trashedCount;
                         })()}
@@ -1219,16 +1238,23 @@ export default function PatientsPage() {
                     if (!selectedPatient) return null;
                     
                     const cleanPPhone = selectedPatient.phone?.replace(/\D/g, '') || "";
-                    const patientAppointments = safeAppointments
-                      .filter(app => {
+                    const patientAppointments = [
+                      ...safeAppointments,
+                      ...trash
+                        .filter(t => t.type === 'appointment' && t.data.appointment)
+                        .map(t => ({ ...t.data.appointment!, isDeleted: true }))
+                    ]
+                      .filter((app, index, self) => {
+                        // Deduplicate by ID
+                        if (self.findIndex(a => a.id === app.id) !== index) return false;
                         const cleanAppPhone = app.patient_phone?.replace(/\D/g, '') || "";
                         const matchById = app.patient_id === selectedPatient.id;
-                        const matchByPhone = cleanPPhone && cleanAppPhone && (
+                        const matchByPhone = cleanPPhone.length >= 7 && cleanAppPhone.length >= 7 && (
                           cleanPPhone.endsWith(cleanAppPhone) || cleanAppPhone.endsWith(cleanPPhone)
                         );
-                        return (matchById || matchByPhone) && app.status !== 'cancelada';
+                        return matchById || matchByPhone;
                       })
-                      .sort((a, b) => (parseToDate(a.start_time)?.getTime() || 0) - (parseToDate(b.start_time)?.getTime() || 0));
+                      .sort((a, b) => (parseToDate(b.start_time)?.getTime() || 0) - (parseToDate(a.start_time)?.getTime() || 0));
 
                     if (patientAppointments.length > 0) {
                       return patientAppointments.map(app => (
@@ -1266,12 +1292,14 @@ export default function PatientsPage() {
                                   {mounted ? (parseToDate(app.start_time)?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) || '--:--') : ''}
                                 </p>
                                 <Badge className={cn("rounded-lg px-1.5 py-0 text-[7px] font-black uppercase tracking-wider border-none", 
+                                  app.isDeleted ? 'bg-red-50 dark:bg-red-500/10 text-red-600' :
                                   app.status === 'confirmada' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600' : 
                                   app.status === 'programada' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-600' :
                                   app.status === 'completada' ? 'bg-purple-50 dark:bg-purple-500/10 text-purple-600' :
+                                  app.status === 'cancelada' ? 'bg-orange-50 dark:bg-orange-500/10 text-orange-600' :
                                   'bg-slate-100 text-slate-400'
                                 )}>
-                                  {app.status}
+                                  {app.isDeleted ? 'Papelera' : app.status}
                                 </Badge>
                               </div>
                             </div>

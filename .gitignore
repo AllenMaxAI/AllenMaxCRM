@@ -51,3 +51,5 @@ normalize*.js
 safe_migrate.js
 test_*.js
 test_*.ts
+
+.vercel

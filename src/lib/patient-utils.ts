@@ -1,11 +1,11 @@
 export const findPatientByPhone = (phone: string | undefined | null, patients: any[] = []) => {
   if (!phone) return undefined;
   const cleanTarget = phone.replace(/\D/g, '');
-  if (cleanTarget.length < 5) return undefined;
+  if (cleanTarget.length < 7) return undefined;
 
   return patients.find(p => {
     const cleanP = p.phone?.replace(/\D/g, '') || "";
-    return cleanP.length >= 5 && (cleanP.endsWith(cleanTarget) || cleanTarget.endsWith(cleanP));
+    return cleanP.length >= 7 && (cleanP.endsWith(cleanTarget) || cleanTarget.endsWith(cleanP));
   });
 };
 

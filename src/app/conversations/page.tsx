@@ -565,7 +565,7 @@ export default function ConversationsPage() {
       const matchesSearch = matchesName || matchesPhone || matchesId;
       const matchesChannel = filterChannel === "Todos" || normalizeChannel(conv.channel) === filterChannel;
       return matchesSearch && matchesChannel;
-    });
+    }).sort((a, b) => (parseToDate(b.updated_at)?.getTime() || 0) - (parseToDate(a.updated_at)?.getTime() || 0));
   }, [conversations, searchQuery, filterChannel]);
 
   const filteredCalls = useMemo(() => {
@@ -574,7 +574,7 @@ export default function ConversationsPage() {
       call.phone_number?.toLowerCase().includes(query) ||
       call.summary?.toLowerCase().includes(query) ||
       call.intent?.toLowerCase().includes(query)
-    );
+    ).sort((a, b) => (parseToDate(b.timestamp)?.getTime() || 0) - (parseToDate(a.timestamp)?.getTime() || 0));
   }, [calls, searchQuery]);
 
   const deleteConversationById = async (e: React.MouseEvent, id: string) => {
@@ -764,11 +764,32 @@ export default function ConversationsPage() {
       }
     }
 
-    // 7. Convertir Markdown Negrita **texto** -> <strong>texto</strong>
+    // 8. Formatear mensajes de SISTEMA (Premium System Logs)
+    if (formatted.includes('[SISTEMA]')) {
+      const cleanSystem = formatted.replace('[SISTEMA]', '').trim();
+      formatted = `
+        <div class="flex items-center gap-3 p-1">
+          <div class="p-2.5 bg-blue-500/10 dark:bg-blue-500/20 rounded-xl border border-blue-200/50 dark:border-blue-500/20 shadow-sm shadow-blue-500/5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-blue-500"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 mb-0.5">
+              <div class="text-[10px] font-black uppercase tracking-widest text-blue-500/70">Sistema</div>
+              <div class="h-1 w-1 rounded-full bg-blue-300 dark:bg-blue-500/40"></div>
+              <div class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase">Registro Interno</div>
+            </div>
+            <div class="text-[13px] text-slate-600 dark:text-slate-300 font-semibold leading-relaxed">${cleanSystem}</div>
+          </div>
+        </div>
+      `.replace(/\n\s+/g, '');
+    }
+
+    // 9. Convertir Markdown Negrita **texto** -> <strong>texto</strong>
     formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
     return formatted.trim();
   };
+
 
   const handleTrashCall = async (e: React.MouseEvent, callId: string) => {
     e.stopPropagation();
@@ -941,13 +962,15 @@ export default function ConversationsPage() {
                         >
                           <div
                             className={cn(
-                              "rounded-3xl px-6 py-3.5 text-sm font-medium shadow-sm shadow-none leading-relaxed whitespace-pre-wrap",
+                              "rounded-3xl px-6 py-3.5 text-sm font-medium shadow-sm shadow-none leading-relaxed whitespace-pre-wrap transition-all",
                               msg.sender === 'paciente'
                                 ? "bg-slate-50 dark:bg-accent/10 text-slate-700 dark:text-slate-100 rounded-tl-none border border-slate-100 dark:border-border"
-                                : "bg-blue-600 text-white rounded-tr-none shadow-none font-bold"
+                                : "bg-blue-600 text-white rounded-tr-none shadow-none font-bold",
+                              msg.message.includes('[SISTEMA]') && "bg-transparent border-none shadow-none px-0 py-0 max-w-full w-full"
                             )}
                             dangerouslySetInnerHTML={{ __html: formatBotMessage(msg.message) }}
                           />
+
                           <span className={cn(
                             "text-[9px] mt-2 font-black uppercase tracking-widest text-slate-300 flex items-center gap-1.5 px-1",
                             msg.sender === 'IA' && "text-blue-500"

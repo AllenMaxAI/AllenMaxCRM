@@ -627,6 +627,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const trashItem: TrashItem = {
       id: trashId,
       type: 'patient',
+      patient_id: id,
       deleted_at: new Date().toISOString(),
       data: {
         patient,
@@ -644,6 +645,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         const appTrash: TrashItem = {
           id: tId,
           type: 'appointment',
+          patient_id: a.patient_id,
           deleted_at: new Date().toISOString(),
           data: {
             appointment: a,
@@ -663,6 +665,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         const convTrash: TrashItem = {
           id: tId,
           type: 'conversation',
+          patient_id: c.patient_id,
           deleted_at: new Date().toISOString(),
           data: {
             conversation: c,
@@ -682,6 +685,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         const callTrash: TrashItem = {
           id: tId,
           type: 'call',
+          patient_id: c.patient_id,
           deleted_at: new Date().toISOString(),
           data: {
             call: c,
@@ -755,6 +759,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const trashItem: TrashItem = {
       id: trashId,
       type: 'appointment',
+      patient_id: appointment.patient_id,
       deleted_at: new Date().toISOString(),
       data: {
         appointment,
@@ -795,6 +800,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const trashItem: TrashItem = {
       id: trashId,
       type: 'conversation',
+      patient_id: conversation.patient_id,
       deleted_at: new Date().toISOString(),
       data: {
         conversation: conversation,
@@ -875,6 +881,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const trashItem: TrashItem = {
       id: trashId,
       type: 'call',
+      patient_id: call.patient_id,
       deleted_at: new Date().toISOString(),
       data: {
         call,
