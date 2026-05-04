@@ -71,13 +71,33 @@ export async function POST(req: Request) {
     }
 
     if (action === 'crear_cita') {
+      // Función para normalizar el tratamiento recibido de Retell a las etiquetas estándar de la clínica
+      const normalizeTreatment = (raw: string): string => {
+        if (!raw) return "Consulta General";
+        const lower = raw.toLowerCase();
+        if (lower.includes("periodoncia") || lower.includes("encía") || lower.includes("encias")) return "Periodoncia";
+        if (lower.includes("ortopediatria") || lower.includes("infantil") || lower.includes("hijo") || lower.includes("niño") || lower.includes("pediatría")) return "Odontopediatría";
+        if (lower.includes("ortodoncia") && (lower.includes("invisible") || lower.includes("invisalign"))) return "Ortodoncia invisible";
+        if (lower.includes("ortodoncia") || lower.includes("brackets")) return "Ortodoncia";
+        if (lower.includes("implante") || lower.includes("implantes")) return "Implantes dentales";
+        if (lower.includes("estetica") || lower.includes("estética") || lower.includes("blanqueamiento") || lower.includes("carilla")) return "Estética dental";
+        if (lower.includes("cirugia") || lower.includes("cirugía") || lower.includes("extraccion") || lower.includes("extracción") || lower.includes("muela") || lower.includes("cordal")) return "Cirugía oral";
+        if (lower.includes("endodoncia") || lower.includes("nervio")) return "Endodoncia";
+        if (lower.includes("limpieza") || lower.includes("higiene") || lower.includes("tartrectomia")) return "Limpieza dental";
+        if (lower.includes("empaste") || lower.includes("obturacion") || lower.includes("caries")) return "Odontología conservadora"; // o Consulta General si prefieres
+        return "Consulta General";
+      };
+
+      const mappedTreatment = normalizeTreatment(args.treatment);
+
       const newApp = {
         patient_name: args.patient_name,
         patient_phone: args.patient_phone,
         start_time: args.start_time,
         end_time: args.end_time,
         notes: args.notes || "",
-        treatment: args.treatment || "Consulta",
+        treatment: mappedTreatment,
+        original_treatment_dictated: args.treatment || "", // Guardamos el original por si acaso
         source: "Agente de voz",
         status: "programada"
       };

@@ -1553,14 +1553,7 @@ export default function CalendarPage() {
                           onValueChange={(val) => setSelectedApp({...selectedApp, title: val, treatment: val})}
                         >
                           <SelectTrigger className="h-11 rounded-xl bg-white dark:bg-background border-slate-200 dark:border-slate-700 font-bold shadow-none">
-                            <div className="flex items-center gap-2">
-                              {(() => {
-                                const currentVal = (selectedApp.title || selectedApp.treatment || '').replace(/^(Tratamiento|Servicio):\s*/i, '');
-                                const matched = calendarItems.find(i => i.name === currentVal);
-                                return matched ? <div className={cn("w-2.5 h-2.5 rounded-full flex-shrink-0", matched.color)} /> : null;
-                              })()}
-                              <SelectValue />
-                            </div>
+                            <SelectValue placeholder="Seleccionar tipo de cita" />
                           </SelectTrigger>
                           <SelectContent className="rounded-2xl p-1">
                             {(!calendarItems.find(i => i.name === (selectedApp.title || selectedApp.treatment || '').replace(/^(Tratamiento|Servicio):\s*/i, '')) && (selectedApp.title || selectedApp.treatment)) && (
