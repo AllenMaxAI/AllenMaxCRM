@@ -1039,14 +1039,16 @@ export default function PatientsPage() {
                               cleanPPhone.length >= 7 && cleanConvPhone.length >= 7 && (
                                 cleanPPhone.endsWith(cleanConvPhone) || cleanConvPhone.endsWith(cleanPPhone)
                               )
-                          ).length;
+                            );
+                          }).length;
                           const callCount = calls.filter(c => {
                             const cleanCallPhone = c.phone_number?.replace(/\D/g, '') || ""; 
                                                         return c.patient_id === patient.id || (
                               cleanPPhone.length >= 7 && cleanCallPhone.length >= 7 && (
                                 cleanPPhone.endsWith(cleanCallPhone) || cleanCallPhone.endsWith(cleanPPhone)
                               )
-                          ).length;
+                            );
+                          }).length;
                           const trashedCount = trash.filter(t => {
                                                         const matchById = t.patient_id === patient.id;
                             let matchByPhone = false;
