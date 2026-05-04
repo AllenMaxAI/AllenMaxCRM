@@ -53,7 +53,15 @@ const normalizeChannel = (channel: string): string =>
   CHANNEL_MAP[channel] ?? channel;
 
 const formatPhone = (phone: string | undefined | null, showPlaceholder = false) => {
-  if (!phone || phone === "7") return showPlaceholder ? "NÚMERO DESCONOCIDO" : "";
+  if (!phone) return showPlaceholder ? "NÚMERO DESCONOCIDO" : "";
+  
+  // Si el "teléfono" es solo un número muy corto (como "7" u "8") o contiene letras (ID de sesión)
+  // lo tratamos como desconocido para la visualización.
+  const cleanedDigits = phone.trim().replace(/\D/g, "");
+  if (cleanedDigits.length < 5 || /[a-zA-Z]/.test(phone)) {
+    return showPlaceholder ? "NÚMERO DESCONOCIDO" : "";
+  }
+
   let cleaned = phone.trim().replace(/\s+/g, "");
   // Specific fix for Spanish numbers starting with 62 misidentified as Indonesian (+62)
   if (cleaned.startsWith('+6262')) {
