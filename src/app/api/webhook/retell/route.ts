@@ -53,6 +53,11 @@ export async function POST(req: NextRequest) {
     let collectedName = call.call_analysis?.custom_analysis_data?.patient_name || 
                         call.custom_analysis_data?.patient_name || "";
 
+    let collectedPhone = call.call_analysis?.custom_analysis_data?.patient_phone || 
+                         call.custom_analysis_data?.patient_phone || 
+                         call.call_analysis?.custom_analysis_data?.phone ||
+                         call.custom_analysis_data?.phone || "";
+
     let transcript = call.transcript || "";
     transcript = transcript.replace(/\(inaudible speech\)/gi, "(ininteligible)");
     const transcriptLower = transcript.toLowerCase();
@@ -106,8 +111,13 @@ export async function POST(req: NextRequest) {
     const seconds = totalSeconds % 60;
     const formattedDuration = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
-    let phoneNumber = call.from_number || call.to_number || "Web Test";
-    if (phoneNumber.startsWith('+6262')) {
+    // Preferimos el teléfono dictado y analizado, si no, caemos al Caller ID original
+    let phoneNumber = collectedPhone || call.from_number || call.to_number || "Web Test";
+    
+    // Normalizar si es español
+    if (phoneNumber.startsWith('6') && phoneNumber.length === 9) {
+      phoneNumber = '+34' + phoneNumber;
+    } else if (phoneNumber.startsWith('+6262')) {
       phoneNumber = '+3462' + phoneNumber.slice(3);
     } else if (phoneNumber.startsWith('+62') && phoneNumber.length === 10) {
       phoneNumber = '+3462' + phoneNumber.slice(3);
