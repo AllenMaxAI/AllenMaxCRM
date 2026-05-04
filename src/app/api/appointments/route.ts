@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getAppointments, addAppointment, getClinicSettings, deleteAppointment } from '@/lib/db';
+import { getAppointments, addAppointment, getClinicSettings, deleteAppointment, validatePatientOwnership } from '@/lib/db';
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -99,6 +99,20 @@ export async function POST(request: Request) {
     let normalizedStartTime = body.start_time.replace('T', ' ').substring(0, 16);
     let normalizedEndTime = body.end_time ? body.end_time.replace('T', ' ').substring(0, 16) : null;
     
+    // --- VALIDACIÓN DE IDENTIDAD (Seguridad) ---
+    const patientName = body.patient_name || body.name;
+    const patientPhone = body.patient_phone || body.phone;
+    
+    if (patientName && patientPhone) {
+      const validation = await validatePatientOwnership(patientPhone, patientName, undefined, clinicId);
+      if (!validation.isOwner) {
+        return NextResponse.json(
+          { error: "⚠️ Este número ya está registrado a nombre de otro paciente. Por favor, introduce el nombre exacto con el que te registraste." },
+          { status: 403, headers: CORS_HEADERS }
+        );
+      }
+    }
+
     // --- BLOQUEO DE SEGURIDAD (Evitar duplicados) ---
     const dateOnly = normalizedStartTime.split(' ')[0];
     const existingApps = await getAppointments(clinicId, dateOnly);

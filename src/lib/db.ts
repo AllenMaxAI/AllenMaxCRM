@@ -100,27 +100,60 @@ export async function validatePatientOwnership(phone: string, name: string, curr
     }
   }
   const userRef = getUserRef(clinicId);
-  const cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
+  // Normalizamos el teléfono de entrada (dejamos solo dígitos)
+  const cleanInputPhone = phone.replace(/\D/g, '');
+  console.log('[Ownership] Input Phone:', phone, '-> Clean:', cleanInputPhone);
   
-  const q = query(collection(userRef, "patients"), where("phone", "==", cleanPhone));
+  if (!cleanInputPhone) return { ok: true, isOwner: true, isNewPatient: true };
+
+  // Obtenemos los pacientes de la clínica para comparar de forma flexible
+  const q = query(collection(userRef, "patients"));
   const snapshot = await getDocs(q);
+  console.log('[Ownership] Total patients in clinic:', snapshot.size);
   
-  if (snapshot.empty) {
-    return { ok: true, isOwner: false, message: 'New patient' };
+  // Buscamos manualmente el paciente ignorando formatos (espacios, prefijos, etc.)
+  const patientDoc = snapshot.docs.find(doc => {
+    const d = doc.data();
+    if (!d.phone) return false;
+    const dbPhone = d.phone.replace(/\D/g, '');
+    const match = dbPhone.length >= 9 && cleanInputPhone.length >= 9 && 
+                 (dbPhone.endsWith(cleanInputPhone) || cleanInputPhone.endsWith(dbPhone));
+    if (match) console.log('[Ownership] Phone Match Found:', d.phone, '==', phone);
+    return match;
+  });
+  
+  if (!patientDoc) {
+    console.log('[Ownership] No patient found with phone:', cleanInputPhone);
+    return { ok: true, isOwner: true, isNewPatient: true, message: 'New patient' };
   }
   
-  const patientDoc = snapshot.docs[0];
   const patientData = patientDoc.data();
   
-  // Basic name similarity check
-  const existingName = patientData.name.toLowerCase();
-  const inputName = name.toLowerCase();
+  // Normalización de nombres: quitar acentos, pasar a minúsculas y quitar espacios extra
+  const normalizeName = (s: string) => 
+    (s || "").toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim()
+      .replace(/\s+/g, " ");
+
+  const existingName = normalizeName(patientData.name);
+  const inputName = normalizeName(name);
   
+  console.log('[Ownership] Comparing Names:');
+  console.log('  - DB (Original):', patientData.name);
+  console.log('  - DB (Normalized):', existingName);
+  console.log('  - Input (Original):', name);
+  console.log('  - Input (Normalized):', inputName);
+
+  // Si el nombre normalizado coincide (parcialmente), es el dueño
   const isOwner = existingName.includes(inputName) || inputName.includes(existingName);
+  console.log('[Ownership] Result:', isOwner ? 'MATCH' : 'MISMATCH');
   
   return { 
     ok: true, 
     isOwner, 
+    isNewPatient: false,
     patientId: patientDoc.id,
     message: isOwner ? 'Ownership confirmed' : 'Phone already registered to another name'
   };
