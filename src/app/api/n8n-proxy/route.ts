@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { addMessage } from '@/lib/db';
 import { requireFirebaseAuth } from '@/lib/api-auth';
 
-const N8N_WEBHOOK_URL = 'https://allenmax.app.n8n.cloud/webhook/demo-topdentist';
+const N8N_WEBHOOK_URL = 'https://feve.app.n8n.cloud/webhook/demo-topdentist';
 
 export async function POST(req: NextRequest) {
   const authResult = await requireFirebaseAuth(req);
