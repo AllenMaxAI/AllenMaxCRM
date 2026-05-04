@@ -1609,7 +1609,8 @@ export default function CalendarPage() {
                                 selected={new Date(selectedApp.start_time)}
                                 onSelect={(date) => {
                                   if (date) {
-                                    const time = selectedApp.start_time.split('T')[1];
+                                    const timeParts = selectedApp.start_time.includes('T') ? selectedApp.start_time.split('T') : selectedApp.start_time.split(' ');
+                                    const time = timeParts[1] || '00:00:00';
                                     const y = date.getFullYear();
                                     const m = String(date.getMonth() + 1).padStart(2, '0');
                                     const d = String(date.getDate()).padStart(2, '0');
@@ -1641,8 +1642,10 @@ export default function CalendarPage() {
                                 const h = String(hour).padStart(2, '0');
                                 const m = String(minute).padStart(2, '0');
                                 const timeStr = `${h}:${m}`;
-                                const dateStr = selectedApp.start_time.split('T')[0];
-                                const isSelected = selectedApp.start_time.split('T')[1].substring(0, 5) === timeStr;
+                                
+                                const stParts = selectedApp.start_time.includes('T') ? selectedApp.start_time.split('T') : selectedApp.start_time.split(' ');
+                                const dateStr = stParts[0];
+                                const isSelected = stParts[1] ? stParts[1].substring(0, 5) === timeStr : false;
                                 
                                 // Check if the hour is already occupied by another appointment
                                 const isOccupied = appointments.some(a => 
@@ -1657,7 +1660,8 @@ export default function CalendarPage() {
                                     type="button"
                                     disabled={isOccupied}
                                     onClick={() => {
-                                      const date = selectedApp.start_time.split('T')[0];
+                                      const stParts = selectedApp.start_time.includes('T') ? selectedApp.start_time.split('T') : selectedApp.start_time.split(' ');
+                                      const date = stParts[0];
                                       const oldStart = parseToDate(selectedApp.start_time)?.getTime() || 0;
                                       const oldEnd = parseToDate(selectedApp.end_time || selectedApp.start_time)?.getTime() || 0;
                                       const duration = oldEnd - oldStart || 3600000; // Default 1 hr
