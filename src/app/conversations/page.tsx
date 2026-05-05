@@ -329,58 +329,6 @@ export default function ConversationsPage() {
     } catch { }
   }, [user]);
 
-  // Auto-guardado de perfiles (Solo si no son desconocidos)
-  useEffect(() => {
-    if (settings?.autoSaveProfile && conversations.length > 0) {
-      conversations.forEach((conv: any) => {
-        // --- FILTRO DE DESCONOCIDOS ---
-        // No guardamos si el nombre es genérico o está vacío
-        const isUnknown = !conv.patient_name ||
-          ['Desconocido', 'Paciente Desconocido', 'Paciente', 'Nuevo Paciente'].includes(conv.patient_name);
-
-        if (isUnknown) return; // Ignoramos esta conversación
-
-        // --- FILTRO POR FECHA DE AUTOGUARDADO ---
-        // Si el usuario eligió "A partir de ahora", ignoramos chats cuya última actualización sea anterior a la fecha elegida
-        if (settings?.autoSaveFromDate && conv.updated_at) {
-          const updateDate = parseToDate(conv.updated_at);
-          const filterDate = parseToDate(settings.autoSaveFromDate);
-          if (updateDate && filterDate && updateDate < filterDate) {
-            return;
-          }
-        }
-
-        // Asumimos que contact_identifier es el teléfono en WhatsApp/Voz
-        const phone = conv.channel.includes('WhatsApp') || conv.channel.includes('Voz')
-          ? conv.contact_identifier
-          : '';
-
-        // Verificamos si existe por nombre y/o teléfono
-        const exists = patients.some(p =>
-          p.name === conv.patient_name ||
-          (phone && p.phone === phone)
-        );
-
-        if (!exists) {
-          addPatient({
-            name: conv.patient_name,
-            phone: phone || conv.contact_identifier,
-            email: '',
-            first_contact_channel: conv.channel,
-            notes: 'Paciente auto-guardado desde chat.',
-            tags: ['AUTOGUARDADO']
-          });
-        } else if (settings?.autoUpdatePatientName) {
-          // If patient exists by phone but has a generic name, or name is different and better
-          const patientByPhone = patients.find(p => phone && p.phone === phone);
-          if (patientByPhone && conv.patient_name && !isGeneric(conv.patient_name) && patientByPhone.name !== conv.patient_name) {
-            // Only update if current DB name is generic or if we explicitly want to follow the latest name
-            updatePatient(patientByPhone.id, { name: conv.patient_name });
-          }
-        }
-      });
-    }
-  }, [conversations, settings?.autoSaveProfile, patients, addPatient]);
 
   useEffect(() => {
     if (!selectedConv || !effectiveUid) return;

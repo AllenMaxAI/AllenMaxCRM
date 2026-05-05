@@ -179,7 +179,8 @@ export default function SettingsPage() {
     switchClinic, 
     getClinics,
     logs,
-    logActivity
+    logActivity,
+    triggerHistorySync
   } = useData()
   const [pendingAutoSave, setPendingAutoSave] = useState(settings.autoSaveProfile)
   const [pendingAutoSaveFromDate, setPendingAutoSaveFromDate] = useState<string | null>(settings.autoSaveFromDate || null)
@@ -705,6 +706,11 @@ export default function SettingsPage() {
                               showWeekends: pendingShowWeekends
                             });
                             await handleSave("Comportamiento");
+                            
+                            // Si se activó el autoguardado para todo el historial
+                            if (pendingAutoSave && !pendingAutoSaveFromDate) {
+                              await triggerHistorySync();
+                            }
                           }}
                         >
                           Aplicar Cambios

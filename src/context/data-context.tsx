@@ -24,7 +24,8 @@ import {
   writeBatch,
   limit
 } from "firebase/firestore"
-import { findPatientByPhone } from "@/lib/patient-utils"
+import { findPatientByPhone, isGeneric } from "@/lib/patient-utils"
+import { parseToDate } from "@/lib/utils"
 
 export interface ClinicProfile {
   name: string;
@@ -111,6 +112,7 @@ interface DataContextType {
   updateAppointment: (id: string, updates: Partial<Appointment>) => Promise<void>
   deleteAppointment: (id: string) => Promise<void>
   getClinics: () => Promise<{uid: string, name: string, email: string}[]>
+  triggerHistorySync: () => Promise<void>
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined)
@@ -349,6 +351,78 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
     runMigration();
   }, [user]);
+  
+  // 3. Global Autosave Logic
+  useEffect(() => {
+    if (!settings.autoSaveProfile || !isLoaded || !effectiveUid) return;
+
+    const processAutoSave = async () => {
+      const pendingPatients: Omit<Patient, "id" | "clinic_id" | "created_at">[] = [];
+
+      // Process Conversations
+      conversations.forEach(conv => {
+        if (conv.patient_id) return;
+        if (isGeneric(conv.patient_name)) return;
+
+        // Date filter
+        if (settings.autoSaveFromDate) {
+          const updateDate = parseToDate(conv.updated_at);
+          const filterDate = parseToDate(settings.autoSaveFromDate);
+          if (updateDate && filterDate && updateDate < filterDate) return;
+        }
+
+        const phone = conv.channel.includes('WhatsApp') || conv.channel.includes('Voz')
+          ? conv.contact_identifier
+          : '';
+
+        const exists = findPatientByPhone(phone || conv.contact_identifier, patients);
+        if (!exists) {
+          pendingPatients.push({
+            name: conv.patient_name,
+            phone: phone || conv.contact_identifier,
+            email: '',
+            first_contact_channel: conv.channel,
+            notes: 'Paciente auto-guardado desde chat.',
+            tags: ['AUTOGUARDADO']
+          });
+        }
+      });
+
+      // Process Calls
+      calls.forEach(call => {
+        if (call.patient_id) return;
+        if (!call.patient_name || isGeneric(call.patient_name)) return;
+
+        // Date filter
+        if (settings.autoSaveFromDate) {
+          const callDate = parseToDate(call.timestamp);
+          const filterDate = parseToDate(settings.autoSaveFromDate);
+          if (callDate && filterDate && callDate < filterDate) return;
+        }
+
+        const exists = findPatientByPhone(call.phone_number, patients);
+        if (!exists) {
+          pendingPatients.push({
+            name: call.patient_name,
+            phone: call.phone_number,
+            email: '',
+            first_contact_channel: 'Agente de voz',
+            notes: 'Paciente auto-guardado desde llamada.',
+            tags: ['AUTOGUARDADO']
+          });
+        }
+      });
+
+      // Deduplicate pending patients by phone
+      const uniquePending = Array.from(new Map(pendingPatients.map(p => [p.phone, p])).values());
+
+      for (const p of uniquePending) {
+        await addPatient(p);
+      }
+    };
+
+    processAutoSave();
+  }, [conversations, calls, settings.autoSaveProfile, settings.autoSaveFromDate, isLoaded]);
 
   const logActivity = async (action: string, type: 'info' | 'error' | 'success', details?: any) => {
     if (!effectiveUid) return;
@@ -410,14 +484,14 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
     // 2. Sync all matching conversations
     const cleanNewPhone = newPatient.phone?.replace(/\D/g, '') || "";
-    if (cleanNewPhone.length >= 5) {
+    if (cleanNewPhone.length >= 7) {
       // Find matching conversations
       conversations.forEach(conv => {
         const cleanConvId = conv.contact_identifier?.replace(/\D/g, '') || "";
         const cleanConvPhone = conv.patient_phone?.replace(/\D/g, '') || "";
         
-        const matchesId = cleanConvId.length >= 5 && (cleanConvId.endsWith(cleanNewPhone) || cleanNewPhone.endsWith(cleanConvId));
-        const matchesPhone = cleanConvPhone.length >= 5 && (cleanConvPhone.endsWith(cleanNewPhone) || cleanNewPhone.endsWith(cleanConvPhone));
+        const matchesId = cleanConvId.length >= 7 && (cleanConvId.endsWith(cleanNewPhone) || cleanNewPhone.endsWith(cleanConvId));
+        const matchesPhone = cleanConvPhone.length >= 7 && (cleanConvPhone.endsWith(cleanNewPhone) || cleanNewPhone.endsWith(cleanConvPhone));
 
         if (matchesId || matchesPhone) {
           const convUpdates: any = {
@@ -436,7 +510,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       // Find matching calls
       calls.forEach(call => {
         const cleanCallPhone = call.phone_number?.replace(/\D/g, '') || "";
-        if (cleanCallPhone.length >= 5 && (cleanCallPhone.endsWith(cleanNewPhone) || cleanNewPhone.endsWith(cleanCallPhone))) {
+        if (cleanCallPhone.length >= 7 && (cleanCallPhone.endsWith(cleanNewPhone) || cleanNewPhone.endsWith(cleanCallPhone))) {
           batch.update(doc(userRef, "calls", call.id), {
             patient_id: id
           });
@@ -480,9 +554,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         const cleanConvId = conv.contact_identifier?.replace(/\D/g, '') || "";
         const cleanConvPhone = conv.patient_phone?.replace(/\D/g, '') || "";
         
-        const idMatches = cleanPhone.length >= 5 && cleanConvId.length >= 5 && 
+        const idMatches = cleanPhone.length >= 7 && cleanConvId.length >= 7 && 
                          (cleanConvId.endsWith(cleanPhone) || cleanPhone.endsWith(cleanConvId));
-        const phoneMatches = cleanPhone.length >= 5 && cleanConvPhone.length >= 5 && 
+        const phoneMatches = cleanPhone.length >= 7 && cleanConvPhone.length >= 7 && 
                            (cleanConvPhone.endsWith(cleanPhone) || cleanPhone.endsWith(cleanConvPhone));
 
         if (isLinked || idMatches || phoneMatches) {
@@ -507,7 +581,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       calls.forEach(call => {
         const isLinked = call.patient_id === id;
         const cleanCallPhone = call.phone_number?.replace(/\D/g, '') || "";
-        const phoneMatches = cleanPhone.length >= 5 && cleanCallPhone.length >= 5 && 
+        const phoneMatches = cleanPhone.length >= 7 && cleanCallPhone.length >= 7 && 
                            (cleanCallPhone.endsWith(cleanPhone) || cleanPhone.endsWith(cleanCallPhone));
 
         if (isLinked || phoneMatches) {
@@ -995,6 +1069,18 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  const triggerHistorySync = async () => {
+    if (!effectiveUid || !settings.autoSaveProfile) return;
+    
+    await logActivity("Iniciando sincronización manual de historial", "info");
+    
+    // The useEffect will pick up the conversations/calls and process them.
+    // However, to ensure it processes EVERYTHING (ignoring date filter if needed),
+    // we could temporarily clear the date filter or just run the logic here.
+    // For now, the user's choice of "Historial Pasado" sets autoSaveFromDate to null,
+    // which triggers the useEffect to process everything.
+  }
+
   return (
     <DataContext.Provider value={{ 
       patients, appointments, conversations, calls, trash, settings, 
@@ -1007,7 +1093,8 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       deletePermanently, clearTrash, updateConversation, updateCall,
       addTeamMember, updateTeamMember, deleteTeamMember,
       updateAppointment, deleteAppointment,
-      adminViewUid, effectiveUid, switchClinic, getClinics
+      adminViewUid, effectiveUid, switchClinic, getClinics,
+      triggerHistorySync
     }}>
       {children}
     </DataContext.Provider>
