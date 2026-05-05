@@ -701,14 +701,14 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const trashItem: TrashItem = {
       id: trashId,
       type: 'patient',
-      patient_id: id,
+      patient_id: id || null,
       deleted_at: new Date().toISOString(),
-      data: {
+      data: JSON.parse(JSON.stringify({
         patient,
         appointments: [...relatedApps, ...trashedApps] as Appointment[],
         conversations: [...relatedConvs, ...trashedConvs] as Conversation[],
         calls: [...relatedCalls, ...trashedCalls] as VoiceCall[]
-      }
+      }))
     };
     batch.set(doc(userRef, "trash", trashId), trashItem);
 
@@ -719,13 +719,13 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         const appTrash: TrashItem = {
           id: tId,
           type: 'appointment',
-          patient_id: a.patient_id,
+          patient_id: a.patient_id || null,
           deleted_at: new Date().toISOString(),
-          data: {
+          data: JSON.parse(JSON.stringify({
             appointment: a,
             appointments: [a],
             conversations: []
-          }
+          }))
         };
         batch.set(doc(userRef, "trash", tId), appTrash);
         batch.delete(doc(userRef, "appointments", a.id));
@@ -739,13 +739,13 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         const convTrash: TrashItem = {
           id: tId,
           type: 'conversation',
-          patient_id: c.patient_id,
+          patient_id: c.patient_id || null,
           deleted_at: new Date().toISOString(),
-          data: {
+          data: JSON.parse(JSON.stringify({
             conversation: c,
             appointments: [],
             conversations: [c]
-          }
+          }))
         };
         batch.set(doc(userRef, "trash", tId), convTrash);
         batch.delete(doc(userRef, "conversations", c.id));
@@ -759,13 +759,13 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         const callTrash: TrashItem = {
           id: tId,
           type: 'call',
-          patient_id: c.patient_id,
+          patient_id: c.patient_id || null,
           deleted_at: new Date().toISOString(),
-          data: {
+          data: JSON.parse(JSON.stringify({
             call: c,
             appointments: [],
             conversations: []
-          }
+          }))
         };
         batch.set(doc(userRef, "trash", tId), callTrash);
         batch.delete(doc(userRef, "calls", c.id));
@@ -833,13 +833,13 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const trashItem: TrashItem = {
       id: trashId,
       type: 'appointment',
-      patient_id: appointment.patient_id,
+      patient_id: appointment.patient_id || null,
       deleted_at: new Date().toISOString(),
-      data: {
+      data: JSON.parse(JSON.stringify({
         appointment,
         appointments: [appointment],
         conversations: []
-      }
+      }))
     };
 
     const batch = writeBatch(db);
@@ -874,13 +874,13 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const trashItem: TrashItem = {
       id: trashId,
       type: 'conversation',
-      patient_id: conversation.patient_id,
+      patient_id: conversation.patient_id || null,
       deleted_at: new Date().toISOString(),
-      data: {
+      data: JSON.parse(JSON.stringify({
         conversation: conversation,
         appointments: [],
         conversations: [conversation]
-      }
+      }))
     };
 
     const batch = writeBatch(db);
@@ -955,13 +955,13 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     const trashItem: TrashItem = {
       id: trashId,
       type: 'call',
-      patient_id: call.patient_id,
+      patient_id: call.patient_id || null,
       deleted_at: new Date().toISOString(),
-      data: {
+      data: JSON.parse(JSON.stringify({
         call,
         appointments: [],
         conversations: []
-      }
+      }))
     };
 
     const batch = writeBatch(db);
